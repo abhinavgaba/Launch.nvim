@@ -28,17 +28,26 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
   end,
 })
 
+-- Set column column width to 81 for c/cpp/ to git commit messages
+-- vim.api.nvim_create_autocmd({ "FileType" }, {
+--   pattern = { "gitcommit", "c", "cpp", "NeogitCommitMessage" },
+--   callback = function()
+--   vim.cmd [[ setlocal colorcolumn="81" ]]
+--     end,
+--   })
+
 vim.api.nvim_create_autocmd({ "CmdWinEnter" }, {
   callback = function()
     vim.cmd "quit"
   end,
 })
 
-vim.api.nvim_create_autocmd({ "VimResized" }, {
-  callback = function()
-    vim.cmd "tabdo wincmd ="
-  end,
-})
+-- Disable this because this causes auto-switching to the last tab.
+-- vim.api.nvim_create_autocmd({ "VimResized" }, {
+--   callback = function()
+--     vim.cmd "tabdo wincmd ="
+--   end,
+-- })
 
 vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
   pattern = { "*" },

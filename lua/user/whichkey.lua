@@ -5,7 +5,10 @@ local M = {
 function M.config()
   local mappings = {
     q = { "<cmd>confirm q<CR>", "Quit" },
-    h = { "<cmd>nohlsearch<CR>", "NOHL" },
+    h = {
+      l = { "<cmd>nohlsearch<CR>", "NOHL" },
+    },
+
     [";"] = { "<cmd>tabnew | terminal<CR>", "Term" },
     v = { "<cmd>vsplit<CR>", "Split" },
     b = { name = "Buffers" },
@@ -23,6 +26,9 @@ function M.config()
       h = { "<cmd>-tabmove<cr>", "Move Left" },
       l = { "<cmd>+tabmove<cr>", "Move Right" },
     },
+    w = {
+      w = { "<cmd> lua vim.wo.wrap = not vim.wo.wrap<cr>", "Toggle Word Wrap" },
+    },
     T = { name = "Treesitter" },
   }
 
@@ -35,24 +41,24 @@ function M.config()
         enabled = true,
         suggestions = 20,
       },
-      presets = {
-        operators = false,
-        motions = false,
-        text_objects = false,
-        windows = false,
-        nav = false,
-        z = false,
-        g = false,
-      },
+      -- presets = {
+      --   operators = false,
+      --   motions = false,
+      --   text_objects = false,
+      --   windows = false,
+      --   nav = false,
+      --   z = false,
+      --   g = false,
+      -- },
     },
     window = {
       border = "rounded",
       position = "bottom",
       padding = { 2, 2, 2, 2 },
     },
-    ignore_missing = true,
-    show_help = false,
-    show_keys = false,
+    -- ignore_missing = true,
+    -- show_help = false,
+    -- show_keys = false,
     disable = {
       buftypes = {},
       filetypes = { "TelescopePrompt" },

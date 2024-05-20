@@ -109,6 +109,11 @@ return {
     Lightbulb = " ",
     LineLeft = "▏",
     LineMiddle = "│",
+    LineLeftDashed = "⁞",
+    LineMiddleDashed = "┆",
+    LineMiddleDashedCompact = "┊",
+    LineMiddleDotted = "︙",
+    LineMiddleDottedCompact = "⋮",
     List = " ",
     Lock = " ",
     NewFile = " ",
@@ -156,4 +161,3 @@ return {
     CircuitBoard = " ",
   },
 }
-

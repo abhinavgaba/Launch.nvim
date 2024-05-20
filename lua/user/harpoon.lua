@@ -8,10 +8,10 @@ local M = {
 
 function M.config()
   local keymap = vim.keymap.set
-  local opts = { noremap = true, silent = true }
+  local opts = { noremap = true, silent = true, desc = "Harpoon" }
 
   keymap("n", "<s-m>", "<cmd>lua require('user.harpoon').mark_file()<cr>", opts)
-  keymap("n", "<TAB>", "<cmd>lua require('harpoon.ui').toggle_quick_menu()<cr>", opts)
+  keymap("n", "<leader>hh", "<cmd>lua require('harpoon.ui').toggle_quick_menu()<cr>", opts)
 end
 
 function M.mark_file()

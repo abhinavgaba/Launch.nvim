@@ -23,7 +23,7 @@ M.on_attach = function(client, bufnr)
   lsp_keymaps(bufnr)
 
   if client.supports_method "textDocument/inlayHint" then
-    vim.lsp.inlay_hint.enable(bufnr, true)
+    vim.lsp.inlay_hint.enable(true)
   end
 end
 
@@ -35,13 +35,25 @@ end
 
 M.toggle_inlay_hints = function()
   local bufnr = vim.api.nvim_get_current_buf()
-  vim.lsp.inlay_hint.enable(bufnr, not vim.lsp.inlay_hint.is_enabled(bufnr))
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = bufnr })
+end
+
+vim.g.diagnostics_visible = true
+function M.toggle_diagnostics()
+  if vim.g.diagnostics_visible then
+    vim.g.diagnostics_visible = false
+    vim.diagnostic.enable(false)
+  else
+    vim.g.diagnostics_visible = true
+    vim.diagnostic.enable()
+  end
 end
 
 function M.config()
   local wk = require "which-key"
   wk.register {
     ["<leader>la"] = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
+    ["<leader>ld"] = { "<cmd>lua require('user.lspconfig').toggle_diagnostics()<cr>", "Toggle Diagnostics" },
     ["<leader>lf"] = {
       "<cmd>lua vim.lsp.buf.format({async = true, filter = function(client) return client.name ~= 'typescript-tools' end})<cr>",
       "Format",
@@ -56,9 +68,12 @@ function M.config()
   }
 
   wk.register {
-    ["<leader>la"] = {
+    ["<leader>l"] = {
       name = "LSP",
-      a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action", mode = "v" },
+      {
+        a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action", mode = "v" },
+        f = { "<cmd>lua vim.lsp.buf.format<cr>", "Format", mode = "v" },
+      },
     },
   }
 
@@ -67,15 +82,9 @@ function M.config()
 
   local servers = {
     "lua_ls",
-    "cssls",
-    "html",
-    "tsserver",
-    "eslint",
-    "tsserver",
-    "pyright",
+    "clangd",
+    "fortls",
     "bashls",
-    "jsonls",
-    "yamlls",
   }
 
   local default_diagnostic_config = {
@@ -88,7 +97,7 @@ function M.config()
         { name = "DiagnosticSignInfo", text = icons.diagnostics.Information },
       },
     },
-    virtual_text = false,
+    virtual_text = true,
     update_in_insert = false,
     underline = true,
     severity_sort = true,
@@ -104,9 +113,9 @@ function M.config()
 
   vim.diagnostic.config(default_diagnostic_config)
 
-  for _, sign in ipairs(vim.tbl_get(vim.diagnostic.config(), "signs", "values") or {}) do
-    vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = sign.name })
-  end
+  -- for _, sign in ipairs(vim.tbl_get(vim.diagnostic.config(), "signs", "values") or {}) do
+  --   vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = sign.name })
+  -- end
 
   vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
   vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
