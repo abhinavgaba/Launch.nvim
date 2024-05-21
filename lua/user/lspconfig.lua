@@ -4,7 +4,6 @@ local M = {
   dependencies = {
     {
       "folke/neodev.nvim",
-      "ray-x/lsp_signature.nvim",
     },
   },
 }
@@ -28,7 +27,10 @@ M.on_attach = function(client, bufnr)
   end
 
   -- Use lsp-signature for showing function signatures when typing
-  local lsp_signature = require "lsp_signature"
+  local require_ok, lsp_signature = pcall(require, "lsp_signature")
+  if not require_ok then
+    return
+  end
 
   -- Disable lsp_signature for specific lsps
   if vim.tbl_contains({ "null-ls" }, client.name) then -- blacklist lsp
