@@ -37,8 +37,10 @@ M.on_attach = function(client, bufnr)
     return
   end
 
+  local icons = require "user.icons"
   local signature_config = {
     -- Setup options for lsp_signature
+    hint_prefix = icons.misc.Dog .. " ",
   }
   lsp_signature.on_attach(signature_config, bufnr)
 end

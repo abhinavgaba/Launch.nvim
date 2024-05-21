@@ -152,6 +152,8 @@ return {
     Trace = "✎",
   },
   misc = {
+    ChatBubble = "💬",
+    Dog = "🐶",
     Robot = "󰚩 ",
     Squirrel = " ",
     Tag = " ",
