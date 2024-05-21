@@ -25,6 +25,22 @@ M.on_attach = function(client, bufnr)
   if client.supports_method "textDocument/inlayHint" then
     vim.lsp.inlay_hint.enable(true)
   end
+
+  -- Use lsp-signature for showing function signatures when typing
+  local require_ok, lsp_signature = pcall(require, "lsp_signature")
+  if not require_ok then
+    return
+  end
+
+  -- Disable lsp_signature for specific lsps
+  if vim.tbl_contains({ "null-ls" }, client.name) then -- blacklist lsp
+    return
+  end
+
+  local signature_config = {
+    -- Setup options for lsp_signature
+  }
+  lsp_signature.on_attach(signature_config, bufnr)
 end
 
 function M.common_capabilities()
@@ -68,7 +84,7 @@ function M.config()
   }
 
   wk.register {
-    ["<leader>l"] = {
+    l = {
       name = "LSP",
       {
         a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action", mode = "v" },
@@ -134,6 +150,10 @@ function M.config()
 
     if server == "lua_ls" then
       require("neodev").setup {}
+    end
+
+    if server == "clangd" then
+      opts = vim.tbl_deep_extend("force", { filetypes = { "c", "cpp" } }, opts)
     end
 
     lspconfig[server].setup(opts)

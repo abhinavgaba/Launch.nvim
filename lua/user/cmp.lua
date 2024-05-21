@@ -36,12 +36,15 @@ local M = {
     {
       "hrsh7th/cmp-nvim-lua",
     },
+    -- "hrsh7th/cmp-nvim-lsp-signature-help", -- for displaying function signatures with the current parameter emphasized
+    "onsails/lspkind.nvim", -- vs-code like pictograms
   },
 }
 
 function M.config()
   local cmp = require "cmp"
   local luasnip = require "luasnip"
+  local lspkind = require "lspkind"
   require("luasnip/loaders/from_vscode").lazy_load()
 
   vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
@@ -56,6 +59,9 @@ function M.config()
   local icons = require "user.icons"
 
   cmp.setup {
+    completion = {
+      completeopt = "menu,menuone,preview,noselect",
+    },
     snippet = {
       expand = function(args)
         luasnip.lsp_expand(args.body) -- For `luasnip` users.
@@ -108,34 +114,41 @@ function M.config()
       }),
     },
     formatting = {
-      fields = { "kind", "abbr", "menu" },
-      format = function(entry, vim_item)
-        vim_item.kind = icons.kind[vim_item.kind]
-        vim_item.menu = ({
-          nvim_lsp = "",
-          nvim_lua = "",
-          luasnip = "",
-          buffer = "",
-          path = "",
-          emoji = "",
-        })[entry.source.name]
-
-        if entry.source.name == "emoji" then
-          vim_item.kind = icons.misc.Smiley
-          vim_item.kind_hl_group = "CmpItemKindEmoji"
-        end
-
-        if entry.source.name == "cmp_tabnine" then
-          vim_item.kind = icons.misc.Robot
-          vim_item.kind_hl_group = "CmpItemKindTabnine"
-        end
-
-        return vim_item
-      end,
+      -- fields = { "kind", "abbr", "menu" },
+      -- format = function(entry, vim_item)
+      --   vim_item.kind = icons.kind[vim_item.kind]
+      --   vim_item.menu = ({
+      --     nvim_lsp = "",
+      --     nvim_lua = "",
+      --     luasnip = "",
+      --     buffer = "",
+      --     path = "",
+      --     emoji = "",
+      --   })[entry.source.name]
+      --
+      --   if entry.source.name == "emoji" then
+      --     vim_item.kind = icons.misc.Smiley
+      --     vim_item.kind_hl_group = "CmpItemKindEmoji"
+      --   end
+      --
+      --   if entry.source.name == "cmp_tabnine" then
+      --     vim_item.kind = icons.misc.Robot
+      --     vim_item.kind_hl_group = "CmpItemKindTabnine"
+      --   end
+      --
+      --   return vim_item
+      -- end,
+      -- configure lspkind for vs-code like pictograms in completion menu
+      format = lspkind.cmp_format {
+        maxwidth = 50,
+        ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+        show_labelDetails = true, -- show labelDetails in menu. Disabled by default
+      },
     },
     sources = {
       { name = "copilot" },
       { name = "nvim_lsp" },
+      -- { name = 'nvim_lsp_signature_help' },
       { name = "luasnip" },
       { name = "cmp_tabnine" },
       { name = "nvim_lua" },
