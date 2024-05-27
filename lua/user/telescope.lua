@@ -1,6 +1,9 @@
 local M = {
   "nvim-telescope/telescope.nvim",
-  dependencies = { { "nvim-telescope/telescope-fzf-native.nvim", build = "make", lazy = true } },
+  dependencies = {
+    { "nvim-telescope/telescope-fzf-native.nvim", build = "make", lazy = true },
+    { "debugloop/telescope-undo.nvim", lazy = true },
+  },
 }
 
 function M.config()
@@ -16,11 +19,11 @@ function M.config()
     ["<leader>fr"] = { "<cmd>Telescope resume<cr>", "Resume Last Search" },
     ["<leader>fs"] = { "<cmd>Telescope git_status<cr>", "Git Status-Changed Files" },
     ["<leader>fo"] = { "<cmd>Telescope oldfiles<cr>", "Old Files" },
+    ["<leader>fu"] = { "<cmd>Telescope undo<cr>", "Undo History" },
   }
 
   local icons = require "user.icons"
   local actions = require "telescope.actions"
-
 
   require("telescope").setup {
     defaults = {
@@ -123,6 +126,7 @@ function M.config()
         override_file_sorter = true, -- override the file sorter
         case_mode = "smart_case", -- or "ignore_case" or "respect_case"
       },
+      undo = {},
     },
   }
 end

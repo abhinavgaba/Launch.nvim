@@ -59,7 +59,8 @@ end, { nargs = 0, range = true })
 
 function M.config()
   local keymap = vim.keymap.set
-  keymap("n", "<leader>go", "<cmd>DiffviewOpen<CR>", { desc = "Git Diff View Open (against HEAD)" })
+  keymap("n", "<leader>go", "<cmd>DiffviewOpen -uno<CR>", { desc = "Git Diff View Open (against HEAD)" })
+  keymap("n", "<leader>ga", "<cmd>DiffviewOpen<CR>", { desc = "Git Diff View Open (including Untracked files)" })
   keymap("n", "<leader>gq", "<cmd>DiffviewClose<CR>", { desc = "Git Diff View Close" })
   keymap("n", "<leader>gf", "<cmd>DiffviewFileHistory<CR>", { desc = "Git Diff File History (All Files)" })
   keymap("v", "<leader>gf", "<cmd>DiffviewFileHistory<CR>", { desc = "Git Diff File History (Selected Lines)" })
