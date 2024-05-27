@@ -86,11 +86,11 @@ function M.config()
   }
 
   wk.register {
-    l = {
+    ["<leader>l"] = {
       name = "LSP",
       {
         a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action", mode = "v" },
-        f = { "<cmd>lua vim.lsp.buf.format<cr>", "Format", mode = "v" },
+        f = { "<cmd>lua vim.lsp.buf.format({async=true})<cr>", "Code Format", mode = "v" },
       },
     },
   }

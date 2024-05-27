@@ -36,6 +36,7 @@ local M = {
     {
       "hrsh7th/cmp-nvim-lua",
     },
+    -- Use lsp-signature for this instead
     -- "hrsh7th/cmp-nvim-lsp-signature-help", -- for displaying function signatures with the current parameter emphasized
     "onsails/lspkind.nvim", -- vs-code like pictograms
   },
