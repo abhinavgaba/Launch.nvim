@@ -70,7 +70,7 @@ end
 function M.config()
   local wk = require "which-key"
   wk.register {
-    ["<leader>la"] = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
+    ["<leader>lA"] = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action (without Preview)" },
     ["<leader>ld"] = { "<cmd>lua require('user.lspconfig').toggle_diagnostics()<cr>", "Toggle Diagnostics" },
     ["<leader>lf"] = {
       "<cmd>lua vim.lsp.buf.format({async = true, filter = function(client) return client.name ~= 'typescript-tools' end})<cr>",
