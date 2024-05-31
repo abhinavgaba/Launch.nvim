@@ -1,20 +1,32 @@
 local M = {
   --"folke/tokyonight.nvim",
   --  "LunarVim/darkplus.nvim",
-  "bluz71/vim-nightfly-colors",
+  -- Similar to jellybeans
+  -- 'cryptomilk/nightcity.nvim',
+  -- Nice colors, but no syntax when highlighted
+  -- 'mhartington/oceanic-next',
+  -- Greenish, but quite like jellybeans. Pop-up menu for autocomplete
+  -- doesn't show highlights very well. But has args vs non-args as bold/non-bold.
+  -- "savq/melange-nvim",
+  "catppuccin/nvim",
+  -- Bluish alternative to jellybeans
+  -- 'lourenci/github-colors',
+  -- "bluz71/vim-nightfly-colors",
   -- "EdenEast/nightfox.nvim",
   lazy = false, -- make sure we load this during startup if it is your main colorscheme
   priority = 1000, -- make sure to load this before all the other start plugins
 }
 
--- Setup for Nightfox
--- function M.config()
---   vim.cmd.colorscheme "carbonfox"
--- end
-
--- Setup for nightfly
 function M.config()
-  vim.cmd.colorscheme "nightfly"
+  -- vim.cmd.colorscheme "carbonfox"
+  -- vim.cmd.colorscheme "nightfly"
+  -- vim.cmd.colorscheme "nightcity-afterlife"
+  -- vim.g.oceanic_next_terminal_bold = 1
+  -- vim.g.oceanic_next_terminal_italic = 1
+  -- vim.cmd.colorscheme "OceanicNext"
+  -- vim.cmd.colorscheme "catppuccin"
+  vim.cmd.colorscheme "catppuccin"
+  -- vim.cmd.colorscheme "github-colors"
 end
 
 -- Setup for tokyonight
