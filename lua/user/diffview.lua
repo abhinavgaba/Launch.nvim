@@ -3,18 +3,6 @@ local M = {
   event = "BufEnter",
 }
 
-vim.api.nvim_create_user_command("DiffviewShowCommit", function(input)
-  local args = input.fargs
-  -- Change first arg from COMMIT to COMMIT^..COMMIT
-  local commit_id = table.remove(args, 1)
-  local commit_id_vs_previous_string = commit_id .. "^" .. ".." .. commit_id
-
-  local cmd_string = "DiffviewOpen " .. commit_id_vs_previous_string .. " " .. table.concat(args, "", 2)
-
-  vim.api.nvim_command(cmd_string)
-  -- vim.api.nvim_cmd({cmd = 'DiffviewOpen'}, args)
-end, { nargs = "+" })
-
 -- Get the text under visual selection
 -- local function get_visual_selection(line1, line2)
 --   local s_start = vim.fn.getpos "'<"
@@ -44,26 +32,41 @@ local function get_visual_selection_oneline(linenr)
   return lines[1]
 end
 
-vim.api.nvim_create_user_command("DiffviewShowSelectedCommit", function(input)
-  if input.line1 ~= input.line2 then
-    error "Input selection should not span multiple lines"
+vim.api.nvim_create_user_command("DiffviewShowCommit", function(input)
+  local args = input.fargs
+  local cmd_string
+
+  -- vim.print(vim.inspect(input.fargs), vim.inspect(input.line1), vim.inspect(input.line2), vim.inspect(input.range))
+
+  -- Change first arg from COMMIT to COMMIT^..COMMIT
+  if input.range ~= 0 then
+    if input.line1 ~= input.line2 then
+      error "Input selection should not span multiple lines"
+    end
+    local commit_id = get_visual_selection_oneline(input.line1)
+    local commit_id_vs_previous_string = commit_id .. "^" .. ".." .. commit_id
+    cmd_string = "DiffviewOpen " .. " " .. commit_id_vs_previous_string
+  elseif #input.fargs == 0 then
+    local commit_id = vim.fn.expand "<cword>"
+    local commit_id_vs_previous_string = commit_id .. "^" .. ".." .. commit_id
+    cmd_string = "DiffviewOpen " .. " " .. commit_id_vs_previous_string
+  else
+    local commit_id = table.remove(args, 1)
+    local commit_id_vs_previous_string = commit_id .. "^" .. ".." .. commit_id
+    cmd_string = "DiffviewOpen " .. commit_id_vs_previous_string .. " " .. table.concat(args, "", 2)
   end
 
-  local commit_id = get_visual_selection_oneline(input.line1)
-  local commit_id_vs_previous_string = commit_id .. "^" .. ".." .. commit_id
-
-  local cmd_string = "DiffviewOpen " .. " " .. commit_id_vs_previous_string
   vim.api.nvim_command(cmd_string)
-
-end, { nargs = 0, range = true })
+  -- vim.api.nvim_cmd({cmd = 'DiffviewOpen'}, args)
+end, { nargs = "*", range = true })
 
 function M.config()
   local keymap = vim.keymap.set
   keymap("n", "<leader>go", "<cmd>DiffviewOpen -uno<CR>", { desc = "Git Diff View Open (against HEAD)" })
-  keymap("n", "<leader>ga", "<cmd>DiffviewOpen<CR>", { desc = "Git Diff View Open (including Untracked files)" })
+  keymap("n", "<leader>gO", "<cmd>DiffviewOpen<CR>", { desc = "Git Diff View Open (Including Untracked)" })
   keymap("n", "<leader>gq", "<cmd>DiffviewClose<CR>", { desc = "Git Diff View Close" })
   keymap("n", "<leader>gf", "<cmd>DiffviewFileHistory<CR>", { desc = "Git Diff File History (All Files)" })
   keymap("v", "<leader>gf", ":DiffviewFileHistory<CR>", { desc = "Git Diff File History (Selected Lines)" })
-  keymap("v", "<leader>gs", ":DiffviewShowSelectedCommit<CR>", { desc = "Git Diff Show Commit" })
+  keymap({ "n", "v"}, "<leader>gc", ":DiffviewShowCommit<CR>", { desc = "Git Diff Show Commit" })
 end
 return M
