@@ -1,6 +1,6 @@
 local M = {
   "nvim-treesitter/nvim-treesitter-context",
-  event = "VeryLazy",
+  -- Doesn't work well with lazy-loading
   config = true,
 }
 

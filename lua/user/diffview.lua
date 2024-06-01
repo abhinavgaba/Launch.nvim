@@ -63,7 +63,7 @@ function M.config()
   keymap("n", "<leader>ga", "<cmd>DiffviewOpen<CR>", { desc = "Git Diff View Open (including Untracked files)" })
   keymap("n", "<leader>gq", "<cmd>DiffviewClose<CR>", { desc = "Git Diff View Close" })
   keymap("n", "<leader>gf", "<cmd>DiffviewFileHistory<CR>", { desc = "Git Diff File History (All Files)" })
-  keymap("v", "<leader>gf", "<cmd>DiffviewFileHistory<CR>", { desc = "Git Diff File History (Selected Lines)" })
-  keymap("v", "<leader>gs", "<cmd>DiffviewShowSelectedCommit<CR>", { desc = "Git Diff Show Commit" })
+  keymap("v", "<leader>gf", ":DiffviewFileHistory<CR>", { desc = "Git Diff File History (Selected Lines)" })
+  keymap("v", "<leader>gs", ":DiffviewShowSelectedCommit<CR>", { desc = "Git Diff Show Commit" })
 end
 return M

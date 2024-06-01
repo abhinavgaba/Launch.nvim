@@ -19,6 +19,10 @@ local M = {
       event = "InsertEnter",
     },
     {
+      "hrsh7th/cmp-calc",
+      event = "InsertEnter",
+    },
+    {
       "hrsh7th/cmp-cmdline",
       event = "InsertEnter",
     },
@@ -35,10 +39,17 @@ local M = {
     },
     {
       "hrsh7th/cmp-nvim-lua",
+      event = "InsertEnter",
     },
-    -- Use lsp-signature for this instead
-    -- "hrsh7th/cmp-nvim-lsp-signature-help", -- for displaying function signatures with the current parameter emphasized
-    "onsails/lspkind.nvim", -- vs-code like pictograms
+    {
+      "onsails/lspkind.nvim", -- vs-code like pictograms
+      event = "InsertEnter",
+    },
+    {
+      -- -- Use lsp-signature for this instead
+      -- "hrsh7th/cmp-nvim-lsp-signature-help", -- for displaying function signatures with the current parameter emphasized
+      -- event = "InsertEnter",
+    },
   },
 }
 
@@ -142,7 +153,7 @@ function M.config()
       -- configure lspkind for vs-code like pictograms in completion menu
       format = lspkind.cmp_format {
         maxwidth = 50,
-        ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+        ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
         show_labelDetails = true, -- show labelDetails in menu. Disabled by default
       },
     },
