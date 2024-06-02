@@ -63,11 +63,12 @@ end, { nargs = "*", range = true })
 
 function M.config()
   local keymap = vim.keymap.set
-  keymap("n", "<leader>go", "<cmd>DiffviewOpen -uno<CR>", { desc = "Git Diff View Open (against HEAD)" })
-  keymap("n", "<leader>gO", "<cmd>DiffviewOpen<CR>", { desc = "Git Diff View Open (Including Untracked)" })
-  keymap("n", "<leader>gq", "<cmd>DiffviewClose<CR>", { desc = "Git Diff View Close" })
-  keymap("n", "<leader>gf", "<cmd>DiffviewFileHistory<CR>", { desc = "Git Diff File History (All Files)" })
-  keymap("v", "<leader>gf", ":DiffviewFileHistory<CR>", { desc = "Git Diff File History (Selected Lines)" })
-  keymap({ "n", "v"}, "<leader>gc", ":DiffviewShowCommit<CR>", { desc = "Git Diff Show Commit" })
+  keymap("n", "<leader>go", "<cmd>DiffviewOpen -uno<CR>", { desc = "Diff View (DV) Open (against HEAD)" })
+  keymap("n", "<leader>gO", "<cmd>DiffviewOpen<CR>", { desc = "Diff View (DV) Open (Including Untracked)" })
+  keymap("n", "<leader>gq", "<cmd>DiffviewClose<CR>", { desc = "Diff View (DV) Close" })
+  keymap("n", "<leader>gf", "<cmd>DiffviewFileHistory --follow --no-merges --show-pulls %<CR>", {desc = "DV File History"})
+  keymap("n", "<leader>gF", "<cmd>DiffviewFileHistory<CR>", { desc = "DV File History (All Files)" })
+  keymap("v", "<leader>gf", ":DiffviewFileHistory<CR>", { desc = "DV File History (Selected Lines)" })
+  keymap({ "n", "v"}, "<leader>gv", ":DiffviewShowCommit<CR>", { desc = "DV View Commit" })
 end
 return M

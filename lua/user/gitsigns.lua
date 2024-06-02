@@ -13,11 +13,33 @@ function M.closeGitsignsWindows()
     local bufnr = vim.api.nvim_win_get_buf(winnr)
     local bufname = vim.api.nvim_buf_get_name(bufnr)
 
-
     if string.find(bufname, "^gitsigns:") then
       vim.api.nvim_win_close(winnr, true)
     end
   end
+end
+
+-- Run "GitSigns diffthis <commit-id>", where commit-id is the curent word
+-- under the cursor.
+function M.gitSignsDiffVsCword()
+  local commit_id = vim.fn.expand "<cword>"
+  if commit_id == "" then
+    error "No commit under the cursor to diff against."
+  end
+
+  -- If the current buffer is for Git blame or Diffview, then close it before we
+  -- start a diff against the commit
+  if vim.bo.filetype == "blame" and vim.fn.exists "BlameToggle" then
+    print "Toggling Blame"
+    vim.api.nvim_command "BlameToggle"
+  end
+
+  if string.find(vim.bo.filetype, "^Diffview") and vim.fn.exists "DiffviewClose" then
+    print "Turn off Diffview"
+    vim.api.nvim_command "DiffviewClose"
+  end
+
+  require("gitsigns").diffthis(commit_id)
 end
 
 M.config = function()
@@ -26,9 +48,9 @@ M.config = function()
   local wk = require "which-key"
   wk.register {
     ["<leader>gj"] = { "<cmd>lua require 'gitsigns'.next_hunk({navigation_message = false})<cr>", "Next Hunk" },
-    [']h'] = { "<cmd>lua require 'gitsigns'.next_hunk({navigation_message = false})<cr>", "Next Hunk" },
+    ["]h"] = { "<cmd>lua require 'gitsigns'.next_hunk({navigation_message = false})<cr>", "Next Hunk" },
     ["<leader>gk"] = { "<cmd>lua require 'gitsigns'.prev_hunk({navigation_message = false})<cr>", "Prev Hunk" },
-    ['[h'] = { "<cmd>lua require 'gitsigns'.prev_hunk({navigation_message = false})<cr>", "Prev Hunk" },
+    ["[h"] = { "<cmd>lua require 'gitsigns'.prev_hunk({navigation_message = false})<cr>", "Prev Hunk" },
     ["<leader>gp"] = { "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", "Preview Hunk" },
     ["<leader>gr"] = { "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
     ["<leader>gl"] = { "<cmd>lua require 'gitsigns'.blame_line()<cr>", "Blame" },
@@ -39,7 +61,11 @@ M.config = function()
       "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>",
       "Undo Stage Hunk",
     },
-    ["<leader>gd"] = { "<cmd>Gitsigns diffthis HEAD<cr>", "Git Diff" },
+    ["<leader>gd"] = { "<cmd>Gitsigns diffthis HEAD<cr>", "Git Diff vs HEAD" },
+    ["<leader>gc"] = {
+      "<cmd>lua require('lua/user/gitsigns').gitSignsDiffVsCword()<cr>",
+      "Git Diff vs Commit under Cursor",
+    },
     ["<leader>gD"] = { "<cmd>lua require('lua/user/gitsigns').closeGitsignsWindows()<cr>", "Git Diff Close" },
   }
 
@@ -80,7 +106,7 @@ M.config = function()
       interval = 1000,
       follow_files = true,
     },
-    linehl     = true,
+    linehl = true,
     attach_to_untracked = true,
     current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>",
     update_debounce = 200,
