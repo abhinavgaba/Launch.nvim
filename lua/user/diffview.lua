@@ -32,6 +32,7 @@ local function get_visual_selection_oneline(linenr)
   return lines[1]
 end
 
+-- Show the commit under cursor/selection/passed-as argument, in Diffview.
 vim.api.nvim_create_user_command("DiffviewShowCommit", function(input)
   local args = input.fargs
   local cmd_string

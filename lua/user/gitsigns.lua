@@ -3,6 +3,23 @@ local M = {
   event = "BufEnter",
   cmd = "Gitsigns",
 }
+
+-- Look at all the open windows open in the current tab, and close any
+-- associated with GitSigns (i.e. its buffer name starts with 'gitsigns:').
+function M.closeGitsignsWindows()
+  local windows = vim.api.nvim_tabpage_list_wins(0)
+
+  for _, winnr in pairs(windows) do
+    local bufnr = vim.api.nvim_win_get_buf(winnr)
+    local bufname = vim.api.nvim_buf_get_name(bufnr)
+
+
+    if string.find(bufname, "^gitsigns:") then
+      vim.api.nvim_win_close(winnr, true)
+    end
+  end
+end
+
 M.config = function()
   local icons = require "user.icons"
 
@@ -22,10 +39,8 @@ M.config = function()
       "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>",
       "Undo Stage Hunk",
     },
-    ["<leader>gd"] = {
-      "<cmd>Gitsigns diffthis HEAD<cr>",
-      "Git Diff",
-    },
+    ["<leader>gd"] = { "<cmd>Gitsigns diffthis HEAD<cr>", "Git Diff" },
+    ["<leader>gD"] = { "<cmd>lua require('lua/user/gitsigns').closeGitsignsWindows()<cr>", "Git Diff Close" },
   }
 
   require("gitsigns").setup {
