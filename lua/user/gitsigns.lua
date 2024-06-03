@@ -6,7 +6,7 @@ local M = {
 
 -- Look at all the open windows open in the current tab, and close any
 -- associated with GitSigns (i.e. its buffer name starts with 'gitsigns:').
-function M.closeGitsignsWindows()
+local function closeGitsignsWindows()
   local windows = vim.api.nvim_tabpage_list_wins(0)
 
   for _, winnr in pairs(windows) do
@@ -21,7 +21,7 @@ end
 
 -- Run "GitSigns diffthis <commit-id>", where commit-id is the curent word
 -- under the cursor.
-function M.gitSignsDiffVsCword()
+local function gitSignsDiffVsCword()
   local commit_id = vim.fn.expand "<cword>"
   if commit_id == "" then
     error "No commit under the cursor to diff against."
