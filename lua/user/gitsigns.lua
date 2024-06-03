@@ -62,11 +62,8 @@ M.config = function()
       "Undo Stage Hunk",
     },
     ["<leader>gd"] = { "<cmd>Gitsigns diffthis HEAD<cr>", "Git Diff vs HEAD" },
-    ["<leader>gc"] = {
-      "<cmd>lua require('lua/user/gitsigns').gitSignsDiffVsCword()<cr>",
-      "Git Diff vs Commit under Cursor",
-    },
-    ["<leader>gD"] = { "<cmd>lua require('lua/user/gitsigns').closeGitsignsWindows()<cr>", "Git Diff Close" },
+    ["<leader>gc"] = { gitSignsDiffVsCword, "Git Diff vs Commit under Cursor" },
+    ["<leader>gD"] = { closeGitsignsWindows, "Git Diff Close" },
   }
 
   require("gitsigns").setup {
