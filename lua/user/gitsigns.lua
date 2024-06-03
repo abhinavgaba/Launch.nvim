@@ -19,11 +19,8 @@ local function closeGitsignsWindows()
   end
 end
 
--- Run "GitSigns diffthis <commit-id>", where commit-id is the curent word
--- under the cursor.
-local function gitSignsDiffVsCword()
-  local commit_id = vim.fn.expand "<cword>"
-  if commit_id == "" then
+local function gitSignsDiffVsCommit(commit_id)
+  if commit_id == "" or commit_id == "^" then
     error "No commit under the cursor to diff against."
   end
 
@@ -39,7 +36,28 @@ local function gitSignsDiffVsCword()
     vim.api.nvim_command "DiffviewClose"
   end
 
+  -- It's possible that the current window is for a preview-popup created by
+  -- Gitsigns blame_line, in which case we should close it as we cannot start
+  -- a diff from it. This might also help with other similar pop-ups.
+  if vim.api.nvim_buf_get_name(0) == "" then
+    vim.api.nvim_win_close(0, true)
+  end
+
   require("gitsigns").diffthis(commit_id)
+end
+
+-- Run "GitSigns diffthis <commit-id>", where commit-id is the curent word
+-- under the cursor.
+local function gitSignsDiffVsCword()
+  local commit_id = vim.fn.expand "<cword>"
+  gitSignsDiffVsCommit(commit_id)
+end
+
+-- Run "GitSigns diffthis <commit-id>", where commit-id is the parent of
+-- the commit representing the current word under the cursor.
+local function gitSignsDiffVsCwordParent()
+  local commit_id = vim.fn.expand "<cword>"
+  gitSignsDiffVsCommit(commit_id .. "^")
 end
 
 M.config = function()
@@ -61,9 +79,10 @@ M.config = function()
       "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>",
       "Undo Stage Hunk",
     },
-    ["<leader>gd"] = { "<cmd>Gitsigns diffthis HEAD<cr>", "Git Diff vs HEAD" },
-    ["<leader>gc"] = { gitSignsDiffVsCword, "Git Diff vs Commit under Cursor" },
-    ["<leader>gD"] = { closeGitsignsWindows, "Git Diff Close" },
+    ["<leader>gdh"] = { "<cmd>Gitsigns diffthis HEAD<cr>", "Diff vs HEAD" },
+    ["<leader>gdc"] = { gitSignsDiffVsCword, "Diff vs Commit-under-Cursor" },
+    ["<leader>gdp"] = { gitSignsDiffVsCword, "Diff vs Commit-under-Cursor's Parent" },
+    ["<leader>gD"] = { closeGitsignsWindows, "Diff Close" },
   }
 
   require("gitsigns").setup {
