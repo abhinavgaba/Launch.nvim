@@ -1,6 +1,7 @@
 local M = {
   "sindrets/diffview.nvim",
-  event = "BufEnter",
+  event = "VeryLazy",
+  cmd = { "DiffviewOpen", "DiffviewFileHistory" },
 }
 
 -- Get the text under visual selection
@@ -33,7 +34,7 @@ local function get_visual_selection_oneline(linenr)
 end
 
 -- Show the commit under cursor/selection/passed-as argument, in Diffview.
-vim.api.nvim_create_user_command("DiffviewShowCommit", function(input)
+vim.api.nvim_create_user_command("DiffviewViewCommit", function(input)
   local args = input.fargs
   local cmd_string
 
@@ -69,6 +70,6 @@ function M.config()
   keymap("n", "<leader>gf", "<cmd>DiffviewFileHistory --follow --no-merges --show-pulls %<CR>", {desc = "DV File History"})
   keymap("n", "<leader>gF", "<cmd>DiffviewFileHistory<CR>", { desc = "DV File History (All Files)" })
   keymap("v", "<leader>gf", ":DiffviewFileHistory<CR>", { desc = "DV File History (Selected Lines)" })
-  keymap({ "n", "v"}, "<leader>gv", ":DiffviewShowCommit<CR>", { desc = "DV View Commit" })
+  keymap({ "n", "v"}, "<leader>gv", ":DiffviewViewCommit<CR>", { desc = "DV View Commit" })
 end
 return M
