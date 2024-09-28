@@ -9,6 +9,8 @@ local M = {
   -- doesn't show highlights very well. But has args vs non-args as bold/non-bold.
   -- "savq/melange-nvim",
   "catppuccin/nvim",
+  -- Fairly  close to jellybeanhs but doesn't work well with treesitter-context
+  -- "rebelot/kanagawa.nvim",
   -- Bluish alternative to jellybeans
   -- 'lourenci/github-colors',
   -- "bluz71/vim-nightfly-colors",
@@ -24,7 +26,6 @@ function M.config()
   -- vim.g.oceanic_next_terminal_bold = 1
   -- vim.g.oceanic_next_terminal_italic = 1
   -- vim.cmd.colorscheme "OceanicNext"
-  -- vim.cmd.colorscheme "catppuccin"
   vim.cmd.colorscheme "catppuccin"
   -- vim.cmd.colorscheme "github-colors"
 end
