@@ -8,19 +8,19 @@ local M = {
 
 function M.config()
   local wk = require "which-key"
-  wk.register {
-    ["<leader>bb"] = { "<cmd>Telescope buffers previewer=false<cr>", "Find" },
-    ["<leader>fb"] = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
-    ["<leader>fc"] = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
-    ["<leader>ff"] = { "<cmd>Telescope find_files<cr>", "Find files (in current directory)" },
-    ["<leader>fF"] = { "<cmd>Telescope git_files<cr>", "Find files (in current git repo)" },
-    ["<leader>fp"] = { "<cmd>lua require('telescope').extensions.projects.projects()<cr>", "Projects" },
-    ["<leader>fg"] = { "<cmd>Telescope live_grep<cr>", "Find Text (live Grep)" },
-    ["<leader>fh"] = { "<cmd>Telescope help_tags<cr>", "Help" },
-    ["<leader>fr"] = { "<cmd>Telescope resume<cr>", "Resume Last Search" },
-    ["<leader>fs"] = { "<cmd>Telescope git_status<cr>", "Git Status-Changed Files" },
-    ["<leader>fo"] = { "<cmd>Telescope oldfiles<cr>", "Old Files" },
-    ["<leader>fu"] = { "<cmd>Telescope undo<cr>", "Undo History" },
+  wk.add {
+    { "<leader>bb", "<cmd>Telescope buffers previewer=false<cr>", desc = "Find" },
+    { "<leader>fF", "<cmd>Telescope git_files<cr>", desc = "Find files (in current git repo)" },
+    { "<leader>fb", "<cmd>Telescope git_branches<cr>", desc = "Checkout branch" },
+    { "<leader>fc", "<cmd>Telescope colorscheme<cr>", desc = "Colorscheme" },
+    { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find files (in current directory)" },
+    { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Find Text (live Grep)" },
+    { "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Help" },
+    { "<leader>fo", "<cmd>Telescope oldfiles<cr>", desc = "Old Files" },
+    { "<leader>fp", "<cmd>lua require('telescope').extensions.projects.projects()<cr>", desc = "Projects" },
+    { "<leader>fr", "<cmd>Telescope resume<cr>", desc = "Resume Last Search" },
+    { "<leader>fs", "<cmd>Telescope git_status<cr>", desc = "Git Status-Changed Files" },
+    { "<leader>fu", "<cmd>Telescope undo<cr>", desc = "Undo History" },
   }
 
   local icons = require "user.icons"

@@ -5,9 +5,9 @@ local M = {
 
 function M.config()
   local wk = require("which-key")
-  wk.register({
-    ["<leader>ft"] = { "<cmd>Telescope telescope-tabs list_tabs<cr>", "Find Tabs" },
-  })
+  wk.add {
+    { "<leader>ft", "<cmd>Telescope telescope-tabs list_tabs<cr>", desc = "Find Tabs" },
+  }
 
   require("telescope").load_extension("telescope-tabs")
   require("telescope-tabs").setup({

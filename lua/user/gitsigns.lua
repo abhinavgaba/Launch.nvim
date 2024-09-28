@@ -64,25 +64,22 @@ M.config = function()
   local icons = require "user.icons"
 
   local wk = require "which-key"
-  wk.register {
-    ["<leader>gj"] = { "<cmd>lua require 'gitsigns'.next_hunk({navigation_message = false})<cr>", "Next Hunk" },
-    ["]h"] = { "<cmd>lua require 'gitsigns'.next_hunk({navigation_message = false})<cr>", "Next Hunk" },
-    ["<leader>gk"] = { "<cmd>lua require 'gitsigns'.prev_hunk({navigation_message = false})<cr>", "Prev Hunk" },
-    ["[h"] = { "<cmd>lua require 'gitsigns'.prev_hunk({navigation_message = false})<cr>", "Prev Hunk" },
-    ["<leader>gp"] = { "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", "Preview Hunk" },
-    ["<leader>gr"] = { "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
-    ["<leader>gl"] = { "<cmd>lua require 'gitsigns'.blame_line()<cr>", "Blame" },
-    ["<leader>gh"] = { "<cmd>lua require 'gitsigns'.toggle_linehl()<cr>", "Toggle Highlighting of Modified Lines" },
-    ["<leader>gR"] = { "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
-    ["<leader>gs"] = { "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
-    ["<leader>gu"] = {
-      "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>",
-      "Undo Stage Hunk",
-    },
-    ["<leader>gdh"] = { "<cmd>Gitsigns diffthis HEAD<cr>", "Diff vs HEAD" },
-    ["<leader>gdc"] = { gitSignsDiffVsCword, "Diff vs Commit-under-Cursor" },
-    ["<leader>gdp"] = { gitSignsDiffVsCword, "Diff vs Commit-under-Cursor's Parent" },
-    ["<leader>gD"] = { closeGitsignsWindows, "Diff Close" },
+  wk.add {
+    { "<leader>gD", closeGitsignsWindows, desc = "Diff Close" },
+    { "<leader>gR", "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", desc = "Reset Buffer" },
+    { "<leader>gdc", gitSignsDiffVsCword, desc = "Diff vs Commit-under-Cursor" },
+    { "<leader>gdh", "<cmd>Gitsigns diffthis HEAD<cr>", desc = "Diff vs HEAD" },
+    { "<leader>gdp", gitSignsDiffVsCwordParent, desc = "Diff vs Commit-under-Cursor's Parent" },
+    { "<leader>gh", "<cmd>lua require 'gitsigns'.toggle_linehl()<cr>", desc = "Toggle Highlighting of Modified Lines" },
+    { "<leader>gj", "<cmd>lua require 'gitsigns'.next_hunk({navigation_message = false})<cr>", desc = "Next Hunk" },
+    { "<leader>gk", "<cmd>lua require 'gitsigns'.prev_hunk({navigation_message = false})<cr>", desc = "Prev Hunk" },
+    { "<leader>gl", "<cmd>lua require 'gitsigns'.blame_line()<cr>", desc = "Blame" },
+    { "<leader>gp", "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", desc = "Preview Hunk" },
+    { "<leader>gr", "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", desc = "Reset Hunk" },
+    { "<leader>gs", "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", desc = "Stage Hunk" },
+    { "<leader>gu", "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>", desc = "Undo Stage Hunk" },
+    { "[h", "<cmd>lua require 'gitsigns'.prev_hunk({navigation_message = false})<cr>", desc = "Prev Hunk" },
+    { "]h", "<cmd>lua require 'gitsigns'.next_hunk({navigation_message = false})<cr>", desc = "Next Hunk" },
   }
 
   require("gitsigns").setup {
