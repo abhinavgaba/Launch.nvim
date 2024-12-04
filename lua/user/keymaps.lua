@@ -32,7 +32,7 @@ vim.cmd [[:amenu 10.110 mousemenu.References <cmd>lua vim.lsp.buf.references()<C
 -- vim.cmd [[:amenu 10.120 mousemenu.-sep- *]]
 
 vim.keymap.set("n", "<RightMouse>", "<cmd>:popup mousemenu<CR>")
-vim.keymap.set("n", "<Tab>", "<cmd>:popup mousemenu<CR>")
+-- vim.keymap.set("n", "<Tab>", "<cmd>:popup mousemenu<CR>")
 
 -- more good
 keymap({ "n", "o", "x" }, "<s-h>", "^", opts)
@@ -42,5 +42,6 @@ keymap({ "n", "o", "x" }, "<s-l>", "g_", opts)
 keymap({ "n", "x" }, "j", "gj", opts)
 keymap({ "n", "x" }, "k", "gk", opts)
 
-
+-- run "bc" calculator on the line's text
+vim.cmd [[ map <leader>bc yypkA =<Esc>jOscale=2<Esc>:.,+1!bc<CR>kJ ]]
 vim.api.nvim_set_keymap('t', '<C-;>', '<C-\\><C-n>', opts)
