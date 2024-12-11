@@ -279,7 +279,7 @@ function M.config()
 
   ----------------------------------------------------------------------------------------------------
 
-  local filename = require "tabby.module.filename"
+  local filename = require "tabby.filename"
 
   local cwd = function()
     return "  " .. vim.fn.fnamemodify(vim.fn.getcwd(), ":t") .. " "
