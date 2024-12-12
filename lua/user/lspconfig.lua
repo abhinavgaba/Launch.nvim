@@ -98,6 +98,7 @@ function M.config()
     "clangd",
     "fortls",
     "bashls",
+    "marksman",
   }
 
   local default_diagnostic_config = {

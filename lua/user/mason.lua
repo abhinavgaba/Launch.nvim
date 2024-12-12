@@ -10,6 +10,7 @@ function M.config()
     "lua_ls",
     "clangd",
     "fortls",
+    "marksman",
   }
 
   require("mason").setup {
