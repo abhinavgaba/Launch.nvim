@@ -69,10 +69,11 @@ function M.config()
         { "fancy_diff", fmt = trunc(0, 0, 25, true) },
       },
       lualine_c = {
+        { "fancy_cwd", substitute_home = true, fmt = trunc(0, 0, 60, true) },
         {
           "filename",
           file_status = true, -- displays file status (readonly status, modified status)
-          path = 3, -- 3: Absolute path, with tilde as the home directory
+          path = 1, -- 1: Relative Path
           shorting_target = 40, -- Shortens path to leave 40 spaces in the window
           symbols = {
             modified = "✏️", -- eText to show when the file is modified.
@@ -82,7 +83,6 @@ function M.config()
           },
           fmt = trunc(30, 40, 30, false),
         },
-        -- { "fancy_cwd", substitute_home = true },
       },
       lualine_x = {
         { "fancy_macro", fmt = trunc(0, 0, 120, true) },
