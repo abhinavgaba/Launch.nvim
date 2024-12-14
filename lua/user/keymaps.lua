@@ -42,6 +42,7 @@ keymap({ "n", "o", "x" }, "<s-l>", "g_", opts)
 keymap({ "n", "x" }, "j", "gj", opts)
 keymap({ "n", "x" }, "k", "gk", opts)
 
+vim.api.nvim_set_keymap('t', '<C-;>', '<C-\\><C-n>', opts)
+
 -- run "bc" calculator on the line's text
 vim.cmd [[ map <leader>bc yypkA =<Esc>jOscale=2<Esc>:.,+1!bc<CR>kJ ]]
-vim.api.nvim_set_keymap('t', '<C-;>', '<C-\\><C-n>', opts)

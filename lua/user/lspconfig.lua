@@ -147,7 +147,7 @@ function M.config()
     Error = icons.diagnostics.Error,
     Warn = icons.diagnostics.Warning,
     Hint = icons.diagnostics.Hint,
-    Information = icons.diagnostics.Information,
+    Info = icons.diagnostics.Information,
   }
 
   for type, icon in pairs(signs) do
