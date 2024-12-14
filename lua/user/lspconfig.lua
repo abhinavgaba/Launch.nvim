@@ -23,7 +23,7 @@ M.on_attach = function(client, bufnr)
   lsp_keymaps(bufnr)
 
   -- if client.supports_method "textDocument/inlayHint" then
-  --   vim.lsp.inlay_hint.enable(true)
+  --   vim.lsp.inlay_hint.enable(true, { bufnr })
   -- end
 
   -- Use lsp-signature for showing function signatures when typing
@@ -53,7 +53,7 @@ end
 
 M.toggle_inlay_hints = function()
   local bufnr = vim.api.nvim_get_current_buf()
-  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = bufnr })
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr }, { bufnr })
 end
 
 vim.g.diagnostics_visible = true
