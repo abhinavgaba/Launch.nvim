@@ -94,6 +94,7 @@ function M.config()
     wk.add {
       { "<leader>lj", "<cmd>lua vim.diagnostic.goto_next({float = false})<cr>", desc = "Next Diagnostic" },
       { "<leader>lk", "<cmd>lua vim.diagnostic.goto_prev({float = false})<cr>", desc = "Prev Diagnostic" },
+      { "<leader>lt", "<cmd>lua require('tiny-inline-diagnostic').toggle()<cr>", desc = "Toggle Floating Diagnostics" },
     }
   else
     wk.add {
