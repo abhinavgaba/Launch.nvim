@@ -27,8 +27,8 @@ M.on_attach = function(client, bufnr)
   -- end
 
   -- Use lsp-signature for showing function signatures when typing
-  local require_ok, lsp_signature = pcall(require, "lsp_signature")
-  if not require_ok then
+  local lsp_signature_present, lsp_signature = pcall(require, "lsp_signature")
+  if not lsp_signature_present then
     return
   end
 
@@ -80,8 +80,6 @@ function M.config()
     },
     { "<leader>lh", "<cmd>lua require('user.lspconfig').toggle_inlay_hints()<cr>", desc = "Hints" },
     { "<leader>li", "<cmd>LspInfo<cr>", desc = "Info" },
-    { "<leader>lj", "<cmd>lua vim.diagnostic.goto_next()<cr>", desc = "Next Diagnostic" },
-    { "<leader>lk", "<cmd>lua vim.diagnostic.goto_prev()<cr>", desc = "Prev Diagnostic" },
     { "<leader>ll", "<cmd>lua vim.lsp.codelens.run()<cr>", desc = "CodeLens Action" },
     { "<leader>lq", "<cmd>lua vim.diagnostic.setloclist()<cr>", desc = "Quickfix" },
     { "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", desc = "Rename" },
@@ -89,6 +87,20 @@ function M.config()
     { "<leader>la", "<cmd>lua vim.lsp.buf.code_action()<cr>", desc = "Code Action", mode = "v" },
     { "<leader>lf", "<cmd>lua vim.lsp.buf.format({async=true})<cr>", desc = "Code Format", mode = "v" },
   }
+
+  -- Use tiny-inline-diagnostic shortcuts to show diagnostics floats, if available
+  local tid_present, _ = pcall(require, "tiny-inline-diagnostic")
+  if tid_present then
+    wk.add {
+      { "<leader>lj", "<cmd>lua vim.diagnostic.goto_next({float = false})<cr>", desc = "Next Diagnostic" },
+      { "<leader>lk", "<cmd>lua vim.diagnostic.goto_prev({float = false})<cr>", desc = "Prev Diagnostic" },
+    }
+  else
+    wk.add {
+      { "<leader>lj", "<cmd>lua vim.diagnostic.goto_next()<cr>", desc = "Next Diagnostic" },
+      { "<leader>lk", "<cmd>lua vim.diagnostic.goto_prev()<cr>", desc = "Prev Diagnostic" },
+    }
+  end
 
   local lspconfig = require "lspconfig"
   local icons = require "user.icons"
@@ -104,14 +116,14 @@ function M.config()
   local default_diagnostic_config = {
     signs = {
       active = true,
-      values = {
-        { name = "DiagnosticSignError", text = icons.diagnostics.Error },
-        { name = "DiagnosticSignWarn", text = icons.diagnostics.Warning },
-        { name = "DiagnosticSignHint", text = icons.diagnostics.Hint },
-        { name = "DiagnosticSignInfo", text = icons.diagnostics.Information },
-      },
+      -- values = {
+      --   { name = "DiagnosticSignError", text = icons.diagnostics.Error },
+      --   { name = "DiagnosticSignWarn", text = icons.diagnostics.Warning },
+      --   { name = "DiagnosticSignHint", text = icons.diagnostics.Hint },
+      --   { name = "DiagnosticSignInfo", text = icons.diagnostics.Information },
+      -- },
     },
-    virtual_text = true,
+    virtual_text = false,
     update_in_insert = false,
     underline = true,
     severity_sort = true,
@@ -131,6 +143,18 @@ function M.config()
   --   vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = sign.name })
   -- end
 
+  local signs = {
+    Error = icons.diagnostics.Error,
+    Warn = icons.diagnostics.Warning,
+    Hint = icons.diagnostics.Hint,
+    Information = icons.diagnostics.Information,
+  }
+
+  for type, icon in pairs(signs) do
+    local hl = "DiagnosticSign" .. type
+    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+  end
+
   vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
   vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
   require("lspconfig.ui.windows").default_options.border = "rounded"
@@ -141,8 +165,8 @@ function M.config()
       capabilities = M.common_capabilities(),
     }
 
-    local require_ok, settings = pcall(require, "user.lspsettings." .. server)
-    if require_ok then
+    local lsp_settings_present, settings = pcall(require, "user.lspsettings." .. server)
+    if lsp_settings_present then
       opts = vim.tbl_deep_extend("force", settings, opts)
     end
 
