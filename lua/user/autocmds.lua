@@ -52,7 +52,7 @@ vim.api.nvim_create_autocmd({ "CmdWinEnter" }, {
 -- })
 
 vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
-  pattern = { "*" },
+  pattern = { "!vim" },
   callback = function()
     -- Skip checktime in command-line window and special buffers
     if vim.fn.getcmdwintype() == "" and vim.bo.buftype == "" then
