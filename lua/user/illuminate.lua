@@ -7,7 +7,11 @@ function M.enableIlluminate(buf)
   local buf_name = vim.api.nvim_buf_get_name(buf)
 
   -- Don't run on buffers open via :Gitsigns diffthis etc.
-  if string.find(buf_name, "^gitsigns:") or string.find(buf_name, "^diffview:") then
+  if
+    string.find(buf_name, "^gitsigns:")
+    or string.find(buf_name, "^diffview:")
+    or string.find(buf_name, "^fugitive:")
+  then
     return false
   end
 
@@ -48,6 +52,11 @@ function M.config()
       "TelescopePrompt",
     },
     should_enable = M.enableIlluminate,
+    delay = 200,
+    large_file_cutoff = 2000,
+    large_file_overrides = {
+      providers = { "lsp" },
+    },
   }
 end
 

@@ -66,18 +66,31 @@ function M.config()
     -- git = "",
   }
 
+-- local is_git_file = function(buf)
+-- local buf_name = vim.api.nvim_buf_get_name(buf)
+-- -- Don't run on buffers open via :Gitsigns diffthis etc.
+-- if string.find(buf_name, "gitsigns:") or string.find(buf_name, "diffview:") or string.find(buf_name, "fugitive:") then
+--   return true
+-- end
+
   require("ufo").setup {
     fold_virt_text_handler = handler,
-    close_fold_kinds = {},
-    -- close_fold_kinds = { "imports", "comment" },
-    provider_selector = function(bufnr, filetype, buftype)
-      -- if you prefer treesitter provider rather than lsp,
-      -- return ftMap[filetype] or {'treesitter', 'indent'}
-      return ftMap[filetype]
-      -- return { "treesitter", "indent" }
+    close_fold_kinds = { "imports" },
 
-      -- refer to ./doc/example.lua for detail
-    end,
+    -- provider_selector = function(bufnr, filetype, buftype)
+    --   if is_git_file(bufnr) then
+    --     return { 'lsp', 'indent' }
+    --   end
+    --
+    --   return { 'lsp', 'indent' }
+    --
+    --   -- if you prefer treesitter provider rather than lsp,
+    --   -- return ftMap[filetype] or {'treesitter', 'indent'}
+    --   -- return ftMap[filetype]
+    --   -- return { "treesitter", "indent" }
+    --
+    --   -- refer to ./doc/example.lua for detail
+    -- end,
 
     preview = {
       win_config = {

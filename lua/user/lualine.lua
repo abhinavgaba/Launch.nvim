@@ -40,8 +40,7 @@ end
 --------------------------------------------------------------------------------
 function M.config()
   local lualine = require "lualine"
-
-  lualine.setup {
+  local options = {
     options = {
       theme = "ayu_mirage",
       icons_enabled = true,
@@ -101,6 +100,14 @@ function M.config()
     },
     extensions = { "quickfix", "man", "mason", "fugitive", "trouble", "lazy" },
   }
+
+  -- Add snacks profiler status, if present
+  local snacks_present, snacks = pcall(require, "snacks")
+  if snacks_present then
+    table.insert(options.sections.lualine_x, snacks.profiler.status())
+  end
+
+  lualine.setup(options)
 end
 
 return M

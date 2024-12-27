@@ -19,6 +19,7 @@ local function lsp_keymaps(bufnr)
   keymap(bufnr, "n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
 end
 
+--- @type vim.lsp.client.on_attach_cb
 M.on_attach = function(client, bufnr)
   lsp_keymaps(bufnr)
 
@@ -48,6 +49,12 @@ end
 function M.common_capabilities()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+  -- Setup required for ufo
+  capabilities.textDocument.foldingRange = {
+    dynamicRegistration = false,
+    lineFoldingOnly = true,
+  }
   return capabilities
 end
 
@@ -117,12 +124,6 @@ function M.config()
   local default_diagnostic_config = {
     signs = {
       active = true,
-      -- values = {
-      --   { name = "DiagnosticSignError", text = icons.diagnostics.Error },
-      --   { name = "DiagnosticSignWarn", text = icons.diagnostics.Warning },
-      --   { name = "DiagnosticSignHint", text = icons.diagnostics.Hint },
-      --   { name = "DiagnosticSignInfo", text = icons.diagnostics.Information },
-      -- },
     },
     virtual_text = false,
     update_in_insert = false,
@@ -139,10 +140,6 @@ function M.config()
   }
 
   vim.diagnostic.config(default_diagnostic_config)
-
-  -- for _, sign in ipairs(vim.tbl_get(vim.diagnostic.config(), "signs", "values") or {}) do
-  --   vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = sign.name })
-  -- end
 
   local signs = {
     Error = icons.diagnostics.Error,
@@ -176,7 +173,30 @@ function M.config()
     end
 
     if server == "clangd" then
-      opts = vim.tbl_deep_extend("force", { filetypes = { "c", "cpp" } }, opts)
+      opts = vim.tbl_deep_extend("force", {
+        filetypes = { "c", "cpp" },
+        keys = {
+          { "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
+        },
+        capabilities = {
+          offsetencoding = { "utf-16" },
+        },
+        init_options = {
+          usePlaceholders = true,
+          completeUnimported = true,
+          clangdFileStatus = true,
+        },
+        setup = {
+          clangd = function(_, opts)
+            local clangd_ext_present, clangd_extensions = pcall(require, "clangd_extensions")
+            if not clangd_ext_present then
+              return
+            end
+            clangd_extensions.setup(vim.tbl_deep_extend("force", clangd_ext_opts or {}, { server = opts }))
+            return false
+          end,
+        },
+      }, opts)
     end
 
     lspconfig[server].setup(opts)

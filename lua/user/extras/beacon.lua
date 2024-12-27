@@ -1,3 +1,4 @@
+-- Highlight Current Cursor Position on window change/on-demand etc
 local M = {
   "rainbowhxch/beacon.nvim",
   event = "VeryLazy",

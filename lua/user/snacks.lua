@@ -12,7 +12,7 @@ local M = {
     dashboard = { enabled = true },
     indent = { enabled = false },
     input = { enabled = true },
-    notifier = { enabled = true },
+    notifier = { enabled = false },
     quickfile = { enabled = true },
     scroll = { enabled = true },
     scope = { enabled = true },
@@ -22,6 +22,7 @@ local M = {
     lazygit = {enabled = true},
     gitbrowse = {enabled = false},
     git = {enabled = true},
+    profiler = {},
   },
     keys = {
     { "<leader>.",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
@@ -33,6 +34,7 @@ local M = {
     { "<leader>nd", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
     { "]]",         function() Snacks.words.jump(vim.v.count1) end, desc = "Next Reference", mode = { "n", "t" } },
     { "[[",         function() Snacks.words.jump(-vim.v.count1) end, desc = "Prev Reference", mode = { "n", "t" } },
+    { "<leader>ps", function() Snacks.profiler.scratch() end, desc = "Profiler Scratch Bufer" },
     {
       "<leader>N",
       desc = "Neovim News",
@@ -92,6 +94,10 @@ function M.init()
       Snacks.toggle.inlay_hints():map "<leader>th"
       Snacks.toggle.indent():map "<leader>tg"
       Snacks.toggle.dim():map "<leader>tD"
+      -- Toggle the profiler
+      Snacks.toggle.profiler():map("<leader>pp")
+      -- Toggle the profiler highlights
+      Snacks.toggle.profiler_highlights():map("<leader>ph")
     end,
   })
 end
