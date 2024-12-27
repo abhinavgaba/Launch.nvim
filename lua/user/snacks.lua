@@ -17,7 +17,7 @@ local M = {
     scroll = { enabled = true },
     scope = { enabled = true },
     statuscolumn = { enabled = true },
-    words = { enabled = true },
+    words = { enabled = false }, -- illuminate does this too
     zen = {enabled = false},
     lazygit = {enabled = true},
     gitbrowse = {enabled = false},
