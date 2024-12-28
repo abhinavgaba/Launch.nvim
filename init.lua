@@ -41,7 +41,6 @@ spec "user.noice"
 spec "user.snacks"
 spec "user.extras.bqf"
 spec "user.extras.dressing"
-spec "user.extras.fidget"
 spec "user.extras.eyeliner"
 spec "user.extras.modicator"
 spec "user.extras.neotab"
@@ -57,6 +56,7 @@ spec "user.extras.render-markdown"
 require "user.lazy"
 -- Disabled
 -- spec "user.alpha" -- Use snacks.dashboard instead
+-- spec "user.extras.fidget" -- noice does this too
 -- spec "user.schemastore"
 -- spec "user.cmp" -- use blink instead
 -- spec "user.project"
