@@ -68,7 +68,7 @@ M.config = function()
     { "<leader>gD", closeGitsignsWindows, desc = "Diff Close" },
     { "<leader>gR", "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", desc = "Reset Buffer" },
     { "<leader>gdc", gitSignsDiffVsCword, desc = "Diff vs Commit-under-Cursor" },
-    { "<leader>gdh", "<cmd>lua require 'gitsigns'.diffthis()<cr>", desc = "Diff vs HEAD" },
+    { "<leader>gdh", "<cmd>lua require 'gitsigns'.diffthis(HEAD)<cr>", desc = "Diff vs HEAD" },
     { "<leader>gdp", gitSignsDiffVsCwordParent, desc = "Diff vs Commit-under-Cursor's Parent" },
     { "<leader>gh", "<cmd>lua require 'gitsigns'.toggle_linehl()<cr>", desc = "Toggle Highlighting of Modified Lines" },
     { "<leader>gj", "<cmd>lua require 'gitsigns'.next_hunk({navigation_message = false})<cr>", desc = "Next Hunk" },
