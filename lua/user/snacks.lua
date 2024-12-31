@@ -92,7 +92,7 @@ function M.init()
       Snacks.toggle.treesitter():map "<leader>tT"
       Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map "<leader>tb"
       Snacks.toggle.inlay_hints():map "<leader>th"
-      Snacks.toggle.indent():map "<leader>tg"
+      -- Snacks.toggle.indent():map "<leader>tg"
       Snacks.toggle.dim():map "<leader>tD"
       -- Toggle the profiler
       Snacks.toggle.profiler():map("<leader>pp")
