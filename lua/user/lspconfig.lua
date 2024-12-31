@@ -179,22 +179,12 @@ function M.config()
           { "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
         },
         capabilities = {
-          offsetencoding = { "utf-16" },
+          offsetEncoding = { "utf-16" },
         },
         init_options = {
           usePlaceholders = true,
           completeUnimported = true,
           clangdFileStatus = true,
-        },
-        setup = {
-          clangd = function(_, opts)
-            local clangd_ext_present, clangd_extensions = pcall(require, "clangd_extensions")
-            if not clangd_ext_present then
-              return
-            end
-            clangd_extensions.setup(vim.tbl_deep_extend("force", clangd_ext_opts or {}, { server = opts }))
-            return false
-          end,
         },
       }, opts)
     end
