@@ -17,8 +17,7 @@ spec "user.none-ls"
 spec "user.mason-null-ls"
 spec "user.blink"
 spec "user.extras.copilot"
-spec "user.telescope"
-spec "user.telescope-tabs"
+spec "user.fzf-lua"
 spec "user.illuminate"
 spec "user.diffview"
 spec "user.blame"
@@ -62,6 +61,8 @@ spec "user.extras.render-markdown"
 require "user.lazy"
 -- Disabled
 -- spec "user.alpha" -- Use snacks.dashboard instead
+-- spec "user.telescope"
+-- spec "user.telescope-tabs"
 -- spec "user.extras.fidget" -- noice does this too
 -- spec "user.schemastore"
 -- spec "user.cmp" -- use blink instead
