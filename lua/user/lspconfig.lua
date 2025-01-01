@@ -56,22 +56,28 @@ local function lsp_keymaps(bufnr)
     keymap("n", "<leader>lt", "<cmd>lua require('tiny-inline-diagnostic').toggle()<cr>", opts_with_desc("Toggle Floating Diagnostics"))
   end
 
-    keymap({"n", "v"}, "<leader>l", "", {desc = "LSP"})
-    keymap("n", "<leader>lA", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts_with_desc("Code Action (without Preview)"))
-    keymap("n", "<leader>ld", "<cmd>lua require('user.lspconfig').toggle_diagnostics()<cr>", opts_with_desc("Toggle Diagnostics"))
-    keymap("n",
-      "<leader>lf",
-      "<cmd>lua vim.lsp.buf.format({async = true, filter = function(client) return client.name ~= 'typescript-tools' end})<cr>",
-      opts_with_desc("Format")
-    )
+  keymap({"n", "v"}, "<leader>l", "", {desc = "LSP"})
+  keymap("n", "<leader>lA", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts_with_desc("Code Action (without Preview)"))
+  keymap("n", "<leader>ld", "<cmd>lua require('user.lspconfig').toggle_diagnostics()<cr>", opts_with_desc("Toggle Diagnostics"))
+  keymap("n",
+    "<leader>lf",
+    "<cmd>lua vim.lsp.buf.format({async = true, filter = function(client) return client.name ~= 'typescript-tools' end})<cr>",
+    opts_with_desc("Format")
+  )
+
+  local has_snacks = require("user.lsp-utils").has "snacks"
+  if has_snacks then
+    Snacks.toggle.inlay_hints():map "<leader>lh"
+  else
     keymap("n", "<leader>lh", "<cmd>lua require('user.lspconfig').toggle_inlay_hints()<cr>", opts_with_desc("Inlay Hints Toggle"))
-    keymap("n", "<leader>li", "<cmd>LspInfo<cr>", opts_with_desc("Info"))
-    keymap("n", "<leader>ll", "<cmd>lua vim.lsp.codelens.run()<cr>", opts_with_desc("CodeLens Action"))
-    keymap("n", "<leader>lq", "<cmd>lua vim.diagnostic.setloclist()<cr>", opts_with_desc("Quickfix"))
-    keymap("n", "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", opts_with_desc("Rename"))
-    -- Visual mode shortcuts
-    keymap("v", "<leader>la", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts_with_desc("Code Action"))
-    keymap("v", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async=true})<cr>", opts_with_desc("Code Format"))
+  end
+  keymap("n", "<leader>li", "<cmd>LspInfo<cr>", opts_with_desc("Info"))
+  keymap("n", "<leader>ll", "<cmd>lua vim.lsp.codelens.run()<cr>", opts_with_desc("CodeLens Action"))
+  keymap("n", "<leader>lq", "<cmd>lua vim.diagnostic.setloclist()<cr>", opts_with_desc("Quickfix"))
+  keymap("n", "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", opts_with_desc("Rename"))
+  -- Visual mode shortcuts
+  keymap("v", "<leader>lA", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts_with_desc("Code Action (without Preview)"))
+  keymap("v", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async=true})<cr>", opts_with_desc("Code Format"))
 end
 
 --- @type vim.lsp.client.on_attach_cb

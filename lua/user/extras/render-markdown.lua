@@ -8,7 +8,23 @@ local M = {
   opts = {},
 }
 
-function M.config()
-  vim.keymap.set("n", "<leader>m", require("render-markdown").toggle, { desc = "Markdown Render Toggle"} )
+function M.config(_, opts)
+      require("render-markdown").setup(opts)
+
+  Snacks.toggle({
+    name = "Render Markdown",
+    get = function()
+      return require("render-markdown.state").enabled
+    end,
+    set = function(enabled)
+      local m = require "render-markdown"
+      if enabled then
+        m.enable()
+      else
+        m.disable()
+      end
+    end,
+  }):map "<leader>um"
 end
+
 return M

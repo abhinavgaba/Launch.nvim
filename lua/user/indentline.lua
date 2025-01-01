@@ -1,7 +1,7 @@
 local M = {
   "lukas-reineke/indent-blankline.nvim",
   main = "ibl",
-  --  event = "VeryLazy", -- Lazy-loading doesn't work with rainbow-delimiters.
+  event = "BufReadPre", -- Lazy-loading doesn't work with rainbow-delimiters.
   dependencies = {
     "HiPhish/rainbow-delimiters.nvim",
     "folke/snacks.nvim",

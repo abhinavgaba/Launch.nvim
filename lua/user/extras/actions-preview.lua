@@ -1,11 +1,9 @@
 local M = {
   "aznhe21/actions-preview.nvim",
   event = "VeryLazy",
+  keys = {
+    { "<leader>la", function() require("actions-preview").code_actions() end, desc = "Code Actions (w/ Preview)", mode = { "v", "n" } },
+  }
 }
-
-function M.config()
-  require("actions-preview").setup()
-  vim.keymap.set({ "v", "n" }, "<leader>la", require("actions-preview").code_actions, {desc="Code Actions (w/ Preview)"})
-end
 
 return M

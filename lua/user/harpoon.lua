@@ -4,15 +4,13 @@ local M = {
   dependencies = {
     { "nvim-lua/plenary.nvim" },
   },
+  keys = function()
+    return {
+      {"<s-m>", function() require('user.harpoon').mark_file() end, desc = "Harpoon" },
+      {"<leader>h", function() require('harpoon.ui').toggle_quick_menu() end, desc = "Harpoon" },
+    }
+  end
 }
-
-function M.config()
-  local keymap = vim.keymap.set
-  local opts = { noremap = true, silent = true, desc = "Harpoon" }
-
-  keymap("n", "<s-m>", "<cmd>lua require('user.harpoon').mark_file()<cr>", opts)
-  keymap("n", "<leader>hh", "<cmd>lua require('harpoon.ui').toggle_quick_menu()<cr>", opts)
-end
 
 function M.mark_file()
   require("harpoon.mark").add_file()

@@ -97,7 +97,7 @@ local function set_keymaps()
   -- taken from runtime/lua/_editor.lua
   keymap(
     "n",
-    "<leader>wr",
+    "<leader>ur",
     "<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>",
     { desc = "Redraw / Clear hlsearch / Diff Update" }
   )

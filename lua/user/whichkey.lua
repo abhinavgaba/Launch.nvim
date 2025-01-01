@@ -1,66 +1,110 @@
 local M = {
   "folke/which-key.nvim",
+  event = "VeryLazy",
+  opts_extend = { "spec" },
 }
 
-function M.config()
-  local mappings = {
-    { "<leader>;", "<cmd>tabnew | terminal<CR>", desc = "Term" },
-    { "<leader>T", group = "Treesitter" },
-    { "<leader>a", group = "Tab" },
-    { "<leader>aN", "<cmd>tabnew %<cr>", desc = "New Tab" },
-    { "<leader>ah", "<cmd>-tabmove<cr>", desc = "Move Left" },
-    { "<leader>al", "<cmd>+tabmove<cr>", desc = "Move Right" },
-    { "<leader>an", "<cmd>$tabnew<cr>", desc = "New Empty Tab" },
-    { "<leader>ao", "<cmd>tabonly<cr>", desc = "Only" },
-    { "<leader>b", group = "Buffers" },
-    { "<leader>d", group = "Debug" },
-    { "<leader>f", group = "Find" },
-    { "<leader>g", group = "Git" },
-    { "<leader>gd", group = "Diff vs ..." },
-    { "<leader>hl", "<cmd>nohlsearch<CR>", desc = "NOHL" },
-    { "<leader>p", group = "Profiler" },
-    { "<leader>q", "<cmd>confirm q<CR>", desc = "Quit" },
-    { "<leader>t", group = "Toggles" },
-  }
-
-  local which_key = require "which-key"
-  which_key.setup {
-    plugins = {
-      marks = true,
-      registers = true,
-      spelling = {
-        enabled = true,
-        suggestions = 20,
+M.opts = {
+  preset = "helix",
+  defaults = {},
+  spec = {
+    {
+      mode = { "n", "v" },
+      { "<leader><tab>", group = "tabs" },
+      { "<leader>c", group = "code" },
+      { "<leader>d", group = "debug" },
+      { "<leader>p", group = "profiler" },
+      { "<leader>f", group = "file/find" },
+      { "<leader>g", group = "git" },
+      { "<leader>s", group = "search" },
+      { "<leader>gd", group = "diff vs ..." },
+      { "<leader>u", group = "ui", icon = { icon = "󰙵 ", color = "cyan" } },
+      { "<leader>x", group = "diagnostics/quickfix", icon = { icon = "󱖫 ", color = "green" } },
+      { "<leader>t", group = "toggles" },
+      { "[", group = "prev" },
+      { "]", group = "next" },
+      { "g", group = "goto" },
+      { "gs", group = "surround" },
+      { "z", group = "fold" },
+      {
+        "<leader>b",
+        group = "buffer",
+        expand = function()
+          return require("which-key.extras").expand.buf()
+        end,
       },
-      -- presets = {
-      --   operators = false,
-      --   motions = false,
-      --   text_objects = false,
-      --   windows = false,
-      --   nav = false,
-      --   z = false,
-      --   g = false,
-      -- },
+      {
+        "<leader>w",
+        group = "windows",
+        proxy = "<c-w>",
+        expand = function()
+          return require("which-key.extras").expand.win()
+        end,
+      },
+      -- better descriptions
+      { "gx", desc = "Open with system app" },
     },
-    win = {
-      -- padding = { 2, 2, 2, 2 },
-      border = "rounded",
-    },
-    -- ignore_missing = true,
-    -- show_help = false,
-    -- show_keys = false,
-    disable = {
-      buftypes = {},
-      filetypes = { "TelescopePrompt" },
-    },
-  }
+  },
+}
 
-  local opts = {
-    mode = "n", -- NORMAL mode
-    prefix = "<leader>",
-  }
+M.keys = {
+  {
+    "<leader>?",
+    function()
+      require("which-key").show { global = false }
+    end,
+    desc = "Buffer Keymaps (which-key)",
+  },
+  {
+    "<c-w><space>",
+    function()
+      require("which-key").show { keys = "<c-w>", loop = true }
+    end,
+    desc = "Window Hydra Mode (which-key)",
+  },
+}
 
-  which_key.add(mappings, opts)
+function M.config(_, opts)
+  local which_key = require "which-key"
+  which_key.setup(opts)
+
+  -- which_key.setup {
+  --   plugins = {
+  --     marks = true,
+  --     registers = true,
+  --     spelling = {
+  --       enabled = true,
+  --       suggestions = 20,
+  --     },
+  --     -- presets = {
+  --     --   operators = false,
+  --     --   motions = false,
+  --     --   text_objects = false,
+  --     --   windows = false,
+  --     --   nav = false,
+  --     --   z = false,
+  --     --   g = false,
+  --     -- },
+  --   },
+  --   win = {
+  --     -- padding = { 2, 2, 2, 2 },
+  --     border = "rounded",
+  --   },
+  --   -- ignore_missing = true,
+  --   -- show_help = false,
+  --   -- show_keys = false,
+  --   disable = {
+  --     buftypes = {},
+  --     filetypes = { "TelescopePrompt" },
+  --   },
+  -- }
+  --
+  -- local opts = {
+  --   mode = "n", -- NORMAL mode
+  --   prefix = "<leader>",
+  -- }
+  --
+  -- which_key.add(mappings, opts)
 end
 
 return M
