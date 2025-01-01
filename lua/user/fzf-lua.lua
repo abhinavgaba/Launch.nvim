@@ -9,20 +9,20 @@ function M.opts()
 
   -- Quickfix
   config.defaults.keymap.fzf["ctrl-q"] = "select-all+accept"
-  config.defaults.keymap.fzf["ctrl-u"] = "half-page-up"
-  config.defaults.keymap.fzf["ctrl-d"] = "half-page-down"
+  -- config.defaults.keymap.fzf["ctrl-u"] = "half-page-up"
+  -- config.defaults.keymap.fzf["ctrl-d"] = "half-page-down"
   config.defaults.keymap.fzf["ctrl-x"] = "jump"
-  config.defaults.keymap.fzf["ctrl-f"] = "preview-page-down"
-  config.defaults.keymap.fzf["ctrl-b"] = "preview-page-up"
-  config.defaults.keymap.builtin["<c-f>"] = "preview-page-down"
-  config.defaults.keymap.builtin["<c-b>"] = "preview-page-up"
+  config.defaults.keymap.fzf["ctrl-d"] = "preview-page-down"
+  config.defaults.keymap.fzf["ctrl-u"] = "preview-page-up"
+  config.defaults.keymap.builtin["<ctrl-d>"] = "preview-page-down"
+  config.defaults.keymap.builtin["<ctrl-u>"] = "preview-page-up"
 
-  local lazy_utils = require "user.lazy-utils"
-
-  -- Trouble
-  if lazy_utils.has "trouble.nvim" then
-    config.defaults.actions.files["ctrl-t"] = require("trouble.sources.fzf").actions.open
-  end
+  -- local lazy_utils = require "user.lazy-utils"
+  --
+  -- -- Trouble
+  -- if lazy_utils.has "trouble.nvim" then
+  --   config.defaults.actions.files["ctrl-t"] = require("trouble.sources.fzf").actions.open
+  -- end
 
   local img_previewer ---@type string[]?
   for _, v in ipairs {
