@@ -24,6 +24,8 @@ local function lsp_keymaps(bufnr)
   end
 
   local keymap = vim.keymap.set
+  local lazy_utils = require("user.lazy-utils")
+  local tid_present = lazy_utils.has("tiny-inline-diagnostic.nvim")
 
   keymap("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts_with_desc("Declaration (LSP)"))
   keymap("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts_with_desc("definition (LSP)"))
@@ -31,8 +33,6 @@ local function lsp_keymaps(bufnr)
   keymap("n", "gI", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts_with_desc("Implementation (LSP)"))
   keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts_with_desc("References (LSP)"))
   keymap("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts_with_desc("Line Diagnostic Float (LSP)"))
-
-  local tid_present = require("user.lazy-utils").has("tiny-inline-diagnostic.nvim")
 
   -- Use tiny-inline-diagnostic shortcuts to show diagnostics floats, if available
   local diagnostic_goto_fn = function(next, severity)
@@ -56,7 +56,20 @@ local function lsp_keymaps(bufnr)
     keymap("n", "<leader>lt", "<cmd>lua require('tiny-inline-diagnostic').toggle()<cr>", opts_with_desc("Toggle Floating Diagnostics"))
   end
 
-  keymap({"n", "v"}, "<leader>l", "", {desc = "LSP"})
+  if lazy_utils.has "which-key.nvim" then
+    lazy_utils.on_load("which-key.nvim", function()
+      vim.schedule(function()
+        local wk = require "which-key"
+        local icons = require "user.icons"
+        spec = {
+          mode = { "n", "v" },
+          { "<leader>l", group = "lsp", icon = { icon = icons.ui.Code, color = "blue" } },
+        }
+        wk.add(spec)
+      end)
+    end)
+  end
+
   keymap("n", "<leader>lA", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts_with_desc("Code Action (without Preview)"))
   keymap("n", "<leader>ld", "<cmd>lua require('user.lspconfig').toggle_diagnostics()<cr>", opts_with_desc("Toggle Diagnostics"))
   keymap("n",
