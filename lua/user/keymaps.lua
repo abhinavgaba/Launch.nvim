@@ -147,6 +147,7 @@ end, { desc = "Git Browse (copy)" })
 
 -- quit
 keymap("n", "<leader>Q", "<cmd>qa<cr>", { desc = "Quit All" })
+keymap("n", "<leader>q", "<cmd>confirm q<cr>", {desc = "Quit" })
 
 -- Terminal Mappings
   if has_snacks then

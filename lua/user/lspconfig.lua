@@ -65,7 +65,7 @@ local function lsp_keymaps(bufnr)
     opts_with_desc("Format")
   )
 
-  local has_snacks = require("user.lsp-utils").has "snacks"
+  local has_snacks = require("user.lazy-utils").has "snacks"
   if has_snacks then
     Snacks.toggle.inlay_hints():map "<leader>lh"
   else
@@ -78,6 +78,11 @@ local function lsp_keymaps(bufnr)
   -- Visual mode shortcuts
   keymap("v", "<leader>lA", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts_with_desc("Code Action (without Preview)"))
   keymap("v", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async=true})<cr>", opts_with_desc("Code Format"))
+
+  local actions_preview_present = require("user.lazy-utils").has("actions-preview.nvim")
+  if actions_preview_present then
+    keymap({"n", "v"}, "<leader>la", function() require("actions-preview").code_actions() end, opts_with_desc("Code Action (w/ Preview)"))
+  end
 end
 
 --- @type vim.lsp.client.on_attach_cb
