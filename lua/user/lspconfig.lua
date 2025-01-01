@@ -8,15 +8,70 @@ local M = {
   },
 }
 
+--- @param bufnr integer
 local function lsp_keymaps(bufnr)
-  local opts = { noremap = true, silent = true }
-  local keymap = vim.api.nvim_buf_set_keymap
-  keymap(bufnr, "n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-  keymap(bufnr, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
-  keymap(bufnr, "n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
-  keymap(bufnr, "n", "gI", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-  keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
-  keymap(bufnr, "n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
+  -- Check if the keymaps are already set for this buffer
+  if vim.b[bufnr].diagnostic_keymaps_set then
+    return
+  end
+
+  -- Mark diagnostics keymaps as set for this buffer
+  vim.b[bufnr].diagnostic_keymaps_set = true
+
+    -- Set keymaps for navigating diagnostics
+  local opts_with_desc = function(desc)
+    return {noremap = true, buffer = bufnr, silent = true, desc = desc}
+  end
+
+  local keymap = vim.keymap.set
+
+  keymap("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts_with_desc("Declaration (LSP)"))
+  keymap("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts_with_desc("definition (LSP)"))
+  keymap("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts_with_desc("Hover Info (LSP)"))
+  keymap("n", "gI", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts_with_desc("Implementation (LSP)"))
+  keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts_with_desc("References (LSP)"))
+  keymap("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts_with_desc("Line Diagnostic Float (LSP)"))
+
+  local tid_present = require("user.lazy-utils").has("tiny-inline-diagnostic.nvim")
+
+  -- Use tiny-inline-diagnostic shortcuts to show diagnostics floats, if available
+  local diagnostic_goto_fn = function(next, severity)
+    local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
+    severity = severity and vim.diagnostic.severity[severity] or nil
+    return function()
+      go { severity = severity, float = not tid_present}
+    end
+  end
+
+  keymap("n", "<leader>lj", diagnostic_goto_fn(true), opts_with_desc("Next Diagnostic"))
+  keymap("n", "<leader>lk", diagnostic_goto_fn(false), opts_with_desc("Prev Diagnostic"))
+  keymap("n", "]d", diagnostic_goto_fn(true), opts_with_desc("Next Diagnostic"))
+  keymap("n", "[d", diagnostic_goto_fn(false), opts_with_desc("Prev Diagnostic"))
+  keymap("n", "]e", diagnostic_goto_fn(true, "ERROR"), opts_with_desc("Next Error"))
+  keymap("n", "[e", diagnostic_goto_fn(false, "ERROR"), opts_with_desc("Prev Error"))
+  keymap("n", "]w", diagnostic_goto_fn(true, "WARN"), opts_with_desc("Next Warning"))
+  keymap("n", "[w", diagnostic_goto_fn(false, "WARN"), opts_with_desc("Prev Warning"))
+
+  if tid_present then
+    keymap("n", "<leader>lt", "<cmd>lua require('tiny-inline-diagnostic').toggle()<cr>", opts_with_desc("Toggle Floating Diagnostics"))
+  end
+
+    keymap({"n", "v"}, "<leader>l", "", {desc = "LSP"})
+    keymap("n", "<leader>lA", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts_with_desc("Code Action (without Preview)"))
+    keymap("n", "<leader>ld", "<cmd>lua require('user.lspconfig').toggle_diagnostics()<cr>", opts_with_desc("Toggle Diagnostics"))
+    keymap("n",
+      "<leader>lf",
+      "<cmd>lua vim.lsp.buf.format({async = true, filter = function(client) return client.name ~= 'typescript-tools' end})<cr>",
+      opts_with_desc("Format")
+    )
+    keymap("n", "<leader>lh", "<cmd>lua require('user.lspconfig').toggle_inlay_hints()<cr>", opts_with_desc("Inlay Hints Toggle"))
+    keymap("n", "<leader>li", "<cmd>LspInfo<cr>", opts_with_desc("Info"))
+    keymap("n", "<leader>ll", "<cmd>lua vim.lsp.codelens.run()<cr>", opts_with_desc("CodeLens Action"))
+    keymap("n", "<leader>lq", "<cmd>lua vim.diagnostic.setloclist()<cr>", opts_with_desc("Quickfix"))
+    keymap("n", "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", opts_with_desc("Rename"))
+    -- Visual mode shortcuts
+    keymap("v", "<leader>la", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts_with_desc("Code Action"))
+    keymap("v", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async=true})<cr>", opts_with_desc("Code Format"))
 end
 
 --- @type vim.lsp.client.on_attach_cb
@@ -75,41 +130,6 @@ function M.toggle_diagnostics()
 end
 
 function M.config()
-  local wk = require "which-key"
-  wk.add {
-    { "<leader>l", group = "LSP" },
-    { "<leader>lA", "<cmd>lua vim.lsp.buf.code_action()<cr>", desc = "Code Action (without Preview)" },
-    { "<leader>ld", "<cmd>lua require('user.lspconfig').toggle_diagnostics()<cr>", desc = "Toggle Diagnostics" },
-    {
-      "<leader>lf",
-      "<cmd>lua vim.lsp.buf.format({async = true, filter = function(client) return client.name ~= 'typescript-tools' end})<cr>",
-      desc = "Format",
-    },
-    { "<leader>lh", "<cmd>lua require('user.lspconfig').toggle_inlay_hints()<cr>", desc = "Hints" },
-    { "<leader>li", "<cmd>LspInfo<cr>", desc = "Info" },
-    { "<leader>ll", "<cmd>lua vim.lsp.codelens.run()<cr>", desc = "CodeLens Action" },
-    { "<leader>lq", "<cmd>lua vim.diagnostic.setloclist()<cr>", desc = "Quickfix" },
-    { "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", desc = "Rename" },
-    -- Visual mode shortcuts
-    { "<leader>la", "<cmd>lua vim.lsp.buf.code_action()<cr>", desc = "Code Action", mode = "v" },
-    { "<leader>lf", "<cmd>lua vim.lsp.buf.format({async=true})<cr>", desc = "Code Format", mode = "v" },
-  }
-
-  -- Use tiny-inline-diagnostic shortcuts to show diagnostics floats, if available
-  local tid_present, _ = pcall(require, "tiny-inline-diagnostic")
-  if tid_present then
-    wk.add {
-      { "<leader>lj", "<cmd>lua vim.diagnostic.goto_next({float = false})<cr>", desc = "Next Diagnostic" },
-      { "<leader>lk", "<cmd>lua vim.diagnostic.goto_prev({float = false})<cr>", desc = "Prev Diagnostic" },
-      { "<leader>lt", "<cmd>lua require('tiny-inline-diagnostic').toggle()<cr>", desc = "Toggle Floating Diagnostics" },
-    }
-  else
-    wk.add {
-      { "<leader>lj", "<cmd>lua vim.diagnostic.goto_next()<cr>", desc = "Next Diagnostic" },
-      { "<leader>lk", "<cmd>lua vim.diagnostic.goto_prev()<cr>", desc = "Prev Diagnostic" },
-    }
-  end
-
   local lspconfig = require "lspconfig"
   local icons = require "user.icons"
 

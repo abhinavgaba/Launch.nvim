@@ -18,11 +18,9 @@ function M.config()
     { "<leader>g", group = "Git" },
     { "<leader>gd", group = "Diff vs ..." },
     { "<leader>hl", "<cmd>nohlsearch<CR>", desc = "NOHL" },
-    { "<leader>p", group = "Plugins" },
+    { "<leader>p", group = "Profiler" },
     { "<leader>q", "<cmd>confirm q<CR>", desc = "Quit" },
-    { "<leader>t", group = "Test" },
-    { "<leader>v", "<cmd>vsplit<CR>", desc = "Split" },
-    { "<leader>ww", "<cmd> lua vim.wo.wrap = not vim.wo.wrap<cr>", desc = "Toggle Word Wrap" },
+    { "<leader>t", group = "Toggles" },
   }
 
   local which_key = require "which-key"

@@ -127,7 +127,7 @@ M.keys = {
     "<cmd>FzfLua buffers sort_mru=true sort_lastused=true<cr>",
     desc = "Switch Buffer",
   },
-  { "<leader>/", "<cmd>FzfLua live_grep<cr>", desc = "Grep (cwd)" },
+  -- { "<leader>/", "<cmd>FzfLua live_grep<cr>", desc = "Grep (cwd)" },
   { "<leader>:", "<cmd>FzfLua command_history<cr>", desc = "Command History" },
   { "<leader><space>", "<cmd>FzfLua files<cr>", desc = "Find Files (cwd)" },
   -- find
@@ -140,7 +140,7 @@ M.keys = {
   { "<leader>ft", "<cmd>FzfLua tabs<cr>", desc = "Tabs" },
   -- git
   { "<leader>gc", "<cmd>FzfLua git_commits<CR>", desc = "Commits" },
-  { "<leader>gs", "<cmd>FzfLua git_status<CR>", desc = "Status" },
+  { "<leader>gS", "<cmd>FzfLua git_status<CR>", desc = "Status" },
   -- search
   { '<leader>s"', "<cmd>FzfLua registers<cr>", desc = "Registers" },
   { "<leader>sa", "<cmd>FzfLua autocmds<cr>", desc = "Auto Commands" },

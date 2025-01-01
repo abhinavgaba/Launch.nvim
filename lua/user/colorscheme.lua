@@ -26,6 +26,13 @@ function M.config()
   -- vim.g.oceanic_next_terminal_bold = 1
   -- vim.g.oceanic_next_terminal_italic = 1
   -- vim.cmd.colorscheme "OceanicNext"
+  require("catppuccin").setup {
+    dim_inactive = {
+      enabled = true, -- dims the background color of inactive window
+    },
+    integrations = { blink_cmp = true },
+  }
+
   vim.cmd.colorscheme "catppuccin"
   -- vim.cmd.colorscheme "github-colors"
 end
