@@ -3,7 +3,7 @@ local LazyUtils = require "user.lazy-utils"
 local function set_keymaps()
   local keymap = vim.keymap.set
   local opts = { noremap = true, silent = true }
-  local has_snacks = LazyUtils.has "snacks"
+  local has_snacks = LazyUtils.has "snacks.nvim"
 
 -- stylua: ignore start
   -- keymap("n", "<Space>", "", opts)
@@ -152,10 +152,10 @@ keymap("n", "<leader>w", "<c-w>", { desc = "Windows", remap = true })
 keymap("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true })
 keymap("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
 keymap("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
-  if has_snacks then
-Snacks.toggle.zoom():map("<leader>wm"):map("<leader>tZ")
-Snacks.toggle.zen():map("<leader>tz")
-  end
+if has_snacks then
+  Snacks.toggle.zoom():map("<leader>wm"):map("<leader>tZ")
+  Snacks.toggle.zen():map("<leader>tz")
+end
 
 if LazyUtils.has("auto-session") then
   keymap("n", "<leader>wr", "<cmd>SessionRestore<CR>", { desc = "Restore session for cwd" }) -- restore last workspace session for current directory

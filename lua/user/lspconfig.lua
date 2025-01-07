@@ -71,18 +71,19 @@ local function lsp_keymaps(bufnr)
   end
 
   keymap("n", "<leader>lA", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts_with_desc("Code Action (without Preview)"))
-  keymap("n", "<leader>ld", "<cmd>lua require('user.lspconfig').toggle_diagnostics()<cr>", opts_with_desc("Toggle Diagnostics"))
   keymap("n",
     "<leader>lf",
     "<cmd>lua vim.lsp.buf.format({async = true, filter = function(client) return client.name ~= 'typescript-tools' end})<cr>",
     opts_with_desc("Format")
   )
 
-  local has_snacks = require("user.lazy-utils").has "snacks"
+  local has_snacks = require("user.lazy-utils").has "snacks.nvim"
   if has_snacks then
-    Snacks.toggle.inlay_hints():map "<leader>lh"
+    Snacks.toggle.inlay_hints():map("<leader>lh"):map("<leader>th")
+    Snacks.toggle.diagnostics():map("<leader>ld"):map("<leader>td")
   else
-    keymap("n", "<leader>lh", "<cmd>lua require('user.lspconfig').toggle_inlay_hints()<cr>", opts_with_desc("Inlay Hints Toggle"))
+    keymap("n", "<leader>lh", "<cmd>lua require('user.lspconfig').toggle_inlay_hints()<cr>", opts_with_desc("Inlay Hints"))
+    keymap("n", "<leader>ld", "<cmd>lua require('user.lspconfig').toggle_diagnostics()<cr>", opts_with_desc("Diagnostics"))
   end
   keymap("n", "<leader>li", "<cmd>LspInfo<cr>", opts_with_desc("Info"))
   keymap("n", "<leader>ll", "<cmd>lua vim.lsp.codelens.run()<cr>", opts_with_desc("CodeLens Action"))
