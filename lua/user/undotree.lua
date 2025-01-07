@@ -4,7 +4,6 @@ local M = {
 }
 
 function M.config()
-  vim.keymap.set("n", "<leader>u", "<cmd>UndotreeToggle<cr>", { desc = "Undo-tree Toggle" })
+  vim.keymap.set("n", "<leader>tu", "<cmd>UndotreeToggle<cr>", { desc = "Undo-tree Toggle" })
 end
-
 return M

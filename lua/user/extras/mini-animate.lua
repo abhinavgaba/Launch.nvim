@@ -15,15 +15,17 @@ local set_toggle_keymap = function()
     return
   end
 
-  Snacks.toggle({
-    name = "Mini Animate",
-    get = function()
-      return not vim.g.minianimate_disable
-    end,
-    set = function(state)
-      vim.g.minianimate_disable = not state
-    end,
-  }):map "<leader>ua"
+  lazy_utils.on_load("snacks.nvim", function()
+    Snacks.toggle({
+      name = "Mini Animate",
+      get = function()
+        return not vim.g.minianimate_disable
+      end,
+      set = function(state)
+        vim.g.minianimate_disable = not state
+      end,
+    }):map "<leader>ua"
+  end)
 end
 
 function M.config(_, opts)
