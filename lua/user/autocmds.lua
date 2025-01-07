@@ -185,7 +185,7 @@ end
 -- Detach clangd from a buffer
 local function detach_clangd_from_buffer(bufnr)
   if not clangd_detached_buffers[bufnr] then
-    local clients = vim.lsp.get_active_clients({ bufnr = bufnr })
+    local clients = vim.lsp.get_clients({ bufnr = bufnr })
     for _, client in ipairs(clients) do
       if client.name == "clangd" then
         vim.lsp.buf_detach_client(bufnr, client.id)
@@ -202,7 +202,7 @@ end
 -- Reattach clangd to a buffer
 local function reattach_clangd_to_buffer(bufnr)
   if clangd_detached_buffers[bufnr] then
-    local clients = vim.lsp.get_active_clients()
+    local clients = vim.lsp.get_clients()
     for _, client in ipairs(clients) do
       if client.name == "clangd" then
         vim.lsp.buf_attach_client(bufnr, client.id)
