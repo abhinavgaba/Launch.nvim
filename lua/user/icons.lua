@@ -50,7 +50,6 @@ return {
     Diff = " ",
     Repo = " ",
     Octoface = " ",
-    Copilot = " ",
     Branch = "",
   },
   ui = {
@@ -87,6 +86,7 @@ return {
     CloudDownload = " ",
     Code = "",
     Comment = "",
+    Copilot = " ",
     Dashboard = "",
     DividerLeft = "",
     DividerRight = "",
