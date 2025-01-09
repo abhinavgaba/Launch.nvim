@@ -2,7 +2,7 @@ local M = {
   "nvim-lualine/lualine.nvim",
   dependencies = {
     "nvim-tree/nvim-web-devicons",
-    -- "AndreM222/copilot-lualine",
+    "AndreM222/copilot-lualine",
     "meuter/lualine-so-fancy.nvim",
   },
 }
@@ -84,6 +84,7 @@ function M.config()
         },
       },
       lualine_x = {
+        { "copilot", fmt = trunc(0, 0, 120, true) },
         { "fancy_macro", fmt = trunc(0, 0, 120, true) },
         { keymap, fmt = trunc(0, 0, 120, true) },
         { "fancy_diagnostics", fmt = trunc(0, 0, 50, true) },

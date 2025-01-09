@@ -11,21 +11,22 @@ function M.config()
   require("copilot").setup {
     panel = {
       keymap = {
-        jump_next = "<c-j>",
-        jump_prev = "<c-k>",
-        accept = "<c-l>",
+        jump_next = "<a-j>",
+        jump_prev = "<a-k>",
+        accept = "<a-l>",
         refresh = "r",
-        open = "<M-CR>",
+        open = "<a-c>",
       },
     },
     suggestion = {
       enabled = true,
-      auto_trigger = true,
+      auto_trigger = false,
+      hide_during_completion = true,
       keymap = {
-        accept = "<c-l>",
-        next = "<c-j>",
-        prev = "<c-k>",
-        dismiss = "<c-h>",
+        accept = "<a-l>",
+        next = "<a-j>",
+        prev = "<a-k>",
+        dismiss = "<a-h>",
       },
     },
     filetypes = {
@@ -41,8 +42,8 @@ function M.config()
     copilot_node_command = "node",
   }
 
-  local opts = { noremap = true, silent = true }
-  vim.api.nvim_set_keymap("n", "<c-s>", ":lua require('copilot.suggestion').toggle_auto_trigger()<CR>", opts)
+  local opts = { noremap = true, silent = true, desc = "Toggle Copilot Suggestion Autotrigger" }
+  vim.api.nvim_set_keymap("n", "<leader>aC", ":lua require('copilot.suggestion').toggle_auto_trigger()<CR>", opts)
 
   -- require("copilot_cmp").setup()
 end
