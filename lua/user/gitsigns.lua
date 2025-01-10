@@ -60,84 +60,83 @@ local function gitSignsDiffVsCwordParent()
   gitSignsDiffVsCommit(commit_id .. "^")
 end
 
-M.config = function()
-  local icons = require "user.icons"
+local function set_keymaps(bufnr)
+    local gitsigns = require('gitsigns')
 
-  local wk = require "which-key"
-  wk.add {
-    { "<leader>gD", closeGitsignsWindows, desc = "Diff Close" },
-    { "<leader>gdq", closeGitsignsWindows, desc = "Diff Close" },
-    { "<leader>gR", "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", desc = "Reset Buffer" },
-    { "<leader>gdc", gitSignsDiffVsCword, desc = "Diff vs Commit-under-Cursor" },
-    { "<leader>gdp", gitSignsDiffVsCwordParent, desc = "Diff vs Commit-under-Cursor's Parent" },
-    { "<leader>gdh", "<cmd>lua require 'gitsigns'.diffthis('HEAD')<cr>", desc = "Diff vs HEAD" },
-    { "<leader>gdH", "<cmd>lua require 'gitsigns'.diffthis('HEAD^')<cr>", desc = "Diff vs HEAD's parent" },
-    { "<leader>gds", "<cmd>lua require 'gitsigns'.diffthis()<cr>", desc = "Diff vs Staged" },
-    { "<leader>gh", "<cmd>lua require 'gitsigns'.toggle_linehl()<cr>", desc = "Toggle Highlighting of Modified Lines" },
-    { "<leader>gj", "<cmd>lua require 'gitsigns'.next_hunk({navigation_message = false})<cr>", desc = "Next Hunk" },
-    { "<leader>gk", "<cmd>lua require 'gitsigns'.prev_hunk({navigation_message = false})<cr>", desc = "Prev Hunk" },
-    { "<leader>gl", "<cmd>lua require 'gitsigns'.blame_line()<cr>", desc = "Blame" },
-    { "<leader>gp", "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", desc = "Preview Hunk" },
-    { "<leader>gr", "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", desc = "Reset Hunk" },
-    { "<leader>gs", "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", desc = "Stage Hunk" },
-    { "<leader>gu", "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>", desc = "Undo Stage Hunk" },
-    { "[h", "<cmd>lua require 'gitsigns'.prev_hunk({navigation_message = false})<cr>", desc = "Prev Hunk" },
-    { "]h", "<cmd>lua require 'gitsigns'.next_hunk({navigation_message = false})<cr>", desc = "Next Hunk" },
-  }
+    local function map(mode, l, r, opts)
+      opts = opts or {}
+      opts.buffer = bufnr
+      vim.keymap.set(mode, l, r, opts)
+    end
 
-  require("gitsigns").setup {
-    signs = {
+    -- Actions
+    map('n', "<leader>gD", closeGitsignsWindows, {desc = "Diff Close"})
+    map('n', "<leader>gdq", closeGitsignsWindows, {desc = "Diff Close"})
+    map('n', "<leader>gR", gitsigns.reset_buffer, {desc = "Reset Buffer"})
+    map('n', "<leader>gdc", gitSignsDiffVsCword, {desc = "Diff vs Commit-under-Cursor"})
+    map('n', "<leader>gdp", gitSignsDiffVsCwordParent, {desc = "Diff vs Commit-under-Cursor's Parent"})
+    map('n', "<leader>gdh", function() gitsigns.diffthis('HEAD') end, {desc = "Diff vs HEAD"})
+    map('n', "<leader>gdH", function() gitsigns.diffthis('HEAD^') end, {desc = "Diff vs HEAD's parent"})
+    map('n', "<leader>gds", gitsigns.diffthis, {desc = "Diff vs Staged"})
+    map('n', "<leader>gh", gitsigns.toggle_linehl, {desc = "Toggle Highlighting of Modified Lines"})
+    map('n', "<leader>gj", function() gitsigns.nav_hunk('next', {navigation_message = false}) end, {desc = "Next Hunk"})
+    map('n', "<leader>gJ", function() gitsigns.nav_hunk('last', {navigation_message = false}) end, {desc = "Next Hunk"})
+    map('n', "<leader>gk", function() gitsigns.nav_hunk('prev', {navigation_message = false}) end, {desc = "Prev Hunk"})
+    map('n', "<leader>gK", function() gitsigns.nav_hunk('first', {navigation_message = false}) end, {desc = "Prev Hunk"})
+    map('n', "<leader>gl", gitsigns.blame_line, {desc = "Blame"})
+    map('n', "<leader>gp", gitsigns.preview_hunk, {desc = "Preview Hunk"})
+    map('n', "<leader>gs", gitsigns.stage_hunk, {desc = "Stage Hunk"})
+    map('n', '<leader>gS', gitsigns.stage_buffer, {desc = "Stage Buffer"})
+    map('n', "<leader>gr", gitsigns.reset_hunk, {desc = "Reset Hunk"})
+    map('v', '<leader>gs', function() gitsigns.stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end, {desc = "Stage Hunk"})
+    map('v', '<leader>hr', function() gitsigns.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end, {desc = "Reset Hunk"})
+    map('n', "<leader>gu", gitsigns.undo_stage_hunk, {desc = "Undo Stage Hunk"})
+    map('n', '<leader>gt', gitsigns.toggle_deleted, {desc = "Gitsigns Toggle deleted"})
 
-      -- Pretty sure these are defined in the theme.
-      add = {
-        -- current_line_blame_formatter
-        -- hl = "GitSignsAdd",
-        text = icons.ui.BoldLineMiddle,
-        -- numhl = "GitSignsAddNr",
-        -- linehl = "GitSignsAddLn",
-      },
-      change = {
-        -- hl = "GitSignsChange",
-        text = icons.ui.BoldLineDashedMiddle,
-        -- numhl = "GitSignsChangeNr",
-        -- linehl = "GitSignsChangeLn",
-      },
-      delete = {
-        -- hl = "GitSignsDelete",
-        text = icons.ui.TriangleShortArrowRight,
-        -- numhl = "GitSignsDeleteNr",
-        -- linehl = "GitSignsDeleteLn",
-      },
-      topdelete = {
-        -- hl = "GitSignsDelete",
-        text = icons.ui.TriangleShortArrowRight,
-        -- numhl = "GitSignsDeleteNr",
-        -- linehl = "GitSignsDeleteLn",
-      },
-      changedelete = {
-        -- hl = "GitSignsChange",
-        text = icons.ui.BoldLineMiddle,
-        -- numhl = "GitSignsChangeNr",
-        -- linehl = "GitSignsChangeLn",
-      },
-    },
-    watch_gitdir = {
-      interval = 1000,
-      follow_files = true,
-    },
-    linehl = true,
-    attach_to_untracked = true,
-    current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>",
-    update_debounce = 200,
-    max_file_length = 40000,
-    preview_config = {
-      border = "rounded",
-      style = "minimal",
-      relative = "cursor",
-      row = 0,
-      col = 1,
-    },
-  }
+    map('n', "[h", function() gitsigns.nav_hunk('prev', {navigation_message = false}) end, {desc = "Prev Hunk"})
+    map('n', "]h", function() gitsigns.nav_hunk('next', {navigation_message = false}) end, {desc = "Next Hunk"})
+    map('n', "[H", function() gitsigns.nav_hunk('first', {navigation_message = false}) end, {desc = "Prev Hunk"})
+    map('n', "]H", function() gitsigns.nav_hunk('last', {navigation_message = false}) end, {desc = "Next Hunk"})
+
+    -- Text object
+    map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
 end
+
+M.opts = {
+  signs = {
+    add = {
+      text = require("user.icons").ui.BoldLineMiddle,
+    },
+    change = {
+      text = require("user.icons").ui.BoldLineDashedMiddle,
+    },
+    delete = {
+      text = require("user.icons").ui.TriangleShortArrowRight,
+    },
+    topdelete = {
+      text = require("user.icons").ui.TriangleShortArrowRight,
+    },
+    changedelete = {
+      text = require("user.icons").ui.BoldLineMiddle,
+    },
+  },
+  watch_gitdir = {
+    interval = 1000,
+    follow_files = true,
+  },
+  linehl = true,
+  attach_to_untracked = true,
+  current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>",
+  update_debounce = 200,
+  max_file_length = 40000,
+  preview_config = {
+    border = "rounded",
+    style = "minimal",
+    relative = "cursor",
+    row = 0,
+    col = 1,
+  },
+  on_attach = set_keymaps,
+}
 
 return M
