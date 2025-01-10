@@ -1,5 +1,6 @@
 local M = {
   "giuxtaposition/blink-cmp-copilot",
+  event = "InsertEnter",
   dependencies = {
     {
       "saghen/blink.cmp",
