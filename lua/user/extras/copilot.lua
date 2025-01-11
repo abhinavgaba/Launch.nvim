@@ -41,14 +41,15 @@ M.opts = {
   copilot_node_command = "node",
 }
 
-M.keys = {
-  {
-    "<leader>aC",
-    function()
-      require("copilot.suggestion").toggle_auto_trigger()
-    end,
-    desc = "Toggle Copilot Suggestion Autotrigger",
-  },
-}
+-- Use blink for suggestions. No need for this.
+-- M.keys = {
+--   {
+--     "<leader>aC",
+--     function()
+--       require("copilot.suggestion").toggle_auto_trigger()
+--     end,
+--     desc = "Toggle Copilot Suggestion Autotrigger",
+--   },
+-- }
 
 return M

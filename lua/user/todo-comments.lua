@@ -1,7 +1,8 @@
 -- Colored TODO/FIXME etc labels
+--- @type LazyPluginSpec
 local M = {
   "folke/todo-comments.nvim",
-  lazy = true,
+  event = "VeryLazy",
   dependencies = { "nvim-lua/plenary.nvim" },
   opts = {},
   keys = {

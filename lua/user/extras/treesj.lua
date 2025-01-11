@@ -1,3 +1,4 @@
+--- @type LazyPluginSpec
 local M = {
   "Wansmer/treesj",
   dependencies = { "nvim-treesitter/nvim-treesitter" }, -- if you install parsers with `nvim-treesitter`

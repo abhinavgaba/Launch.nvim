@@ -1,4 +1,6 @@
+--- @type LazyPluginSpec
 local M = {
+  event = "VeryLazy",
   "nvim-lualine/lualine.nvim",
   dependencies = {
     "nvim-tree/nvim-web-devicons",
