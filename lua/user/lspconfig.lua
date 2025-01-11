@@ -108,11 +108,11 @@ M.on_attach = function(client, bufnr)
   -- end
 
   -- Use lsp-signature for showing function signatures when typing
-  local lsp_signature_present, lsp_signature = pcall(require, "lsp_signature")
-  if not lsp_signature_present then
+  if not require("user.lazy-utils").has "lsp_signature.nvim" then
     return
   end
 
+  local lsp_signature = require("lsp_signature")
   -- Disable lsp_signature for specific lsps
   if vim.tbl_contains({ "null-ls" }, client.name) then -- blacklist lsp
     return
