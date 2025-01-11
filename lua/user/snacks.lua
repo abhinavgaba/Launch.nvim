@@ -65,9 +65,8 @@ function M.config(_, opts)
 end
 
 function M.init()
-  vim.api.nvim_create_autocmd("User", {
-    pattern = "VeryLazy",
-    callback = function()
+  require("user.lazy-utils").on_very_lazy(
+    function()
       -- Setup some globals for debugging (lazy-loaded)
       _G.dd = function(...)
         Snacks.debug.inspect(...)
@@ -93,8 +92,8 @@ function M.init()
       Snacks.toggle.profiler():map("<leader>pp")
       -- Toggle the profiler highlights
       Snacks.toggle.profiler_highlights():map("<leader>ph")
-    end,
-  })
+    end
+  )
 end
 
 return M
