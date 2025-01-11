@@ -62,6 +62,7 @@ spec "user.extras.context-vt"
 spec "user.extras.tiny-inline-diagnostic"
 spec "user.extras.mini-animate"
 spec "user.extras.symbol-usage"
+spec "user.extras.advanced-git-search"
 require "user.lazy"
 -- Disabled
 -- spec "user.alpha" -- Use snacks.dashboard instead
