@@ -37,10 +37,13 @@ local function set_keymaps()
   keymap({ "n", "x" }, "j", "gj", opts)
   keymap({ "n", "x" }, "k", "gk", opts)
 
+  -- Use "jk" as esc in insert/visual/terminal modes.
+  keymap({ "i", "v", "t" }, "jk", "<esc>", opts)
+
   vim.api.nvim_set_keymap("t", "<C-;>", "<C-\\><C-n>", opts)
 
   -- run "bc" calculator on the line's text
-  vim.cmd [[ map <leader>bc yypkA =<Esc>jOscale=2<Esc>:.,+1!bc<CR>kJ ]]
+  keymap("n", "<leader>bc", "yypkA =<Esc>jOscale=2<Esc>:.,+1!bc<CR>kJ", {desc = "Run BC on the line"})
 
   -- better up/down
   keymap({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
