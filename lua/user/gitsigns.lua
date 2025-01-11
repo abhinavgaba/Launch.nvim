@@ -89,7 +89,7 @@ local function set_keymaps(bufnr)
     map('n', '<leader>gS', gitsigns.stage_buffer, {desc = "Stage Buffer"})
     map('n', "<leader>gr", gitsigns.reset_hunk, {desc = "Reset Hunk"})
     map('v', '<leader>gs', function() gitsigns.stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end, {desc = "Stage Hunk"})
-    map('v', '<leader>hr', function() gitsigns.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end, {desc = "Reset Hunk"})
+    map('v', '<leader>gr', function() gitsigns.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end, {desc = "Reset Hunk"})
     map('n', "<leader>gu", gitsigns.undo_stage_hunk, {desc = "Undo Stage Hunk"})
     map('n', '<leader>gt', gitsigns.toggle_deleted, {desc = "Gitsigns Toggle deleted"})
 

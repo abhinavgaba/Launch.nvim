@@ -1,3 +1,4 @@
+--- @type LazyPluginSpec
 local M = {
   "jay-babu/mason-null-ls.nvim",
   event = { "BufReadPre", "BufNewFile" },
@@ -7,21 +8,17 @@ local M = {
   },
 }
 
-function M.config()
-  local servers = {
+M.opts = {
+  ensure_installed = {
     "beautysh",
     "clang-format",
     "findent",
     "fprettify",
     -- "prettier",
     "stylua",
-  }
-
-  require("mason-null-ls").setup({
-    ensure_installed = servers,
-    automatic_installation = false,
-    handlers = {},
-  })
-end
+  },
+  automatic_installation = false,
+  handlers = {},
+}
 
 return M
