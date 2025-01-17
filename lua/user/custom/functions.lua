@@ -53,6 +53,20 @@ local function showPopup(title, body)
   })
 end
 
+local ffi = require "ffi"
+
+ffi.cdef [[
+  const char* getAsHex(const char*);
+  const char* getAsDec(const char*);
+]]
+local configPath = vim.fn.stdpath('config')
+print(vim.inspect(configPath))
+local lib = ffi.load(configPath .. "/lua/user/custom/c_utils.so")
+
+-- To test:
+-- 0xff00ffffff9e0140
+-- 18374967954641912128
+
 --- Return the current word under the cursor in hex format.
 --- @return string
 local function getCwordInHex()
@@ -60,8 +74,10 @@ local function getCwordInHex()
   if curword == "" then
     print "No word under the cursor"
   end
-  local ret = vim.fn.printf("0x%x", curword)
-  return ret
+  local ret = lib.getAsHex(curword)
+  local retCast = ffi.string(ret)
+  -- print(vim.inspect(retCast))
+  return retCast
 end
 
 --- Convert the word under the cursor into hex, and show it in
@@ -74,9 +90,16 @@ end
 --- Convert the word under the cursor into decimal, and show it in
 --- a popup
 local function showCwordInDecInPopup()
-  local curWordInHex = getCwordInHex()
-  local curWordInDec = vim.fn.printf("%d", curWordInHex)
-  showPopup("In Dec", { curWordInDec })
+  -- local curWordInHex = getCwordInHex()
+  -- local curWordInDec = vim.fn.printf("%d", curWordInHex)
+  local curword = vim.fn.expand "<cword>"
+  if curword == "" then
+    print "No word under the cursor"
+  end
+  local ret = lib.getAsDec(curword)
+  local retCast = ffi.string(ret)
+  -- print(vim.inspect(retCast))
+  showPopup("In Dec", { retCast })
 end
 
 --- Extracted from clang's libomptarget.h header file.
