@@ -48,6 +48,20 @@ local M = {
       default = { "lsp", "path", "snippets", "buffer" },
       -- optionally disable cmdline completions
       -- cmdline = {},
+      providers = {
+        lsp = {
+          score_offset = 400,
+        },
+        path = {
+          score_offset = 300,
+        },
+        buffer = {
+          score_offset = 200,
+        },
+        snippets = {
+          score_offset = 100,
+        },
+      },
     },
 
     -- Use lsp-signature for signature help for now

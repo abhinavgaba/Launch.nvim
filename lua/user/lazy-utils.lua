@@ -30,6 +30,16 @@ function M.is_loaded(name)
   return Config.plugins[name] and Config.plugins[name]._.loaded
 end
 
+---@param name string
+function M.opts(name)
+  local plugin = M.get_plugin(name)
+  if not plugin then
+    return {}
+  end
+  local Plugin = require("lazy.core.plugin")
+  return Plugin.values(plugin, "opts", false)
+end
+
 --- Launch the given callback once the plugin "name" has been loaded.
 --- Or run it immediately if it's already been loaded.
 ---@param name string
