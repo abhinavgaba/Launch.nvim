@@ -19,6 +19,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
     "DressingSelect",
     "tsplayground",
     "undotree",
+    "dap-float",
     "",
   },
   callback = function()
