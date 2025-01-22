@@ -1,6 +1,8 @@
 -- require "user.profiler-setup"
 require "user.launch"
 require "user.options"
+-- Set machine-specific options, if available
+pcall(require, "user.options-local")
 require "user.keymaps"
 require "user.autocmds"
 require "user.lazy-utils"
