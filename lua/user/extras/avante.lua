@@ -83,7 +83,7 @@ local M = {
   opts = {
     provider = "copilot",
     auto_suggestions_provider = "copilot",
-    -- copilot = { model = "claude-3.5-sonnet" },
+    copilot = { model = "claude-3.7-sonnet" },
     hints = { enabled = true },
     file_selector = {
       provider = "fzf",
