@@ -49,6 +49,7 @@ spec "user.trouble"
 spec "user.rainbow-delimiters"
 spec "user.undotree"
 spec "user.noice"
+spec "user.extras.fidget" -- noice does this too
 spec "user.todo-comments"
 spec "user.mini-ai"
 spec "user.mini-align"
@@ -76,7 +77,6 @@ require "user.lazy"
 -- spec "user.alpha" -- Use snacks.dashboard instead
 -- spec "user.telescope"
 -- spec "user.telescope-tabs"
--- spec "user.extras.fidget" -- noice does this too
 -- spec "user.schemastore"
 -- spec "user.cmp" -- use blink instead
 -- spec "user.project"
