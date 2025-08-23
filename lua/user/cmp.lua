@@ -169,6 +169,7 @@ function M.config()
       { name = "calc" },
       { name = "emoji" },
       { name = "render-markdown" },
+      { name = "texlab" },
     },
     confirm_opts = {
       behavior = cmp.ConfirmBehavior.Replace,

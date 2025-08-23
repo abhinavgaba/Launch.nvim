@@ -83,7 +83,13 @@ local M = {
   opts = {
     provider = "copilot",
     auto_suggestions_provider = "copilot",
-    copilot = { model = "claude-3.7-sonnet" },
+    providers = {
+      copilot = {
+        model = "claude-sonnet-4",
+        disabled_tools = { "web_search" },
+        proxy = "http://proxy-dmz.intel.com:911",
+      },
+    },
     hints = { enabled = true },
     file_selector = {
       provider = "fzf",

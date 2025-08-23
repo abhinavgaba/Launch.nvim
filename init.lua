@@ -1,4 +1,4 @@
--- require "user.profiler-setup"
+require "user.profiler-setup"
 require "user.launch"
 require "user.options"
 -- Set machine-specific options, if available
@@ -73,6 +73,7 @@ spec "user.extras.tiny-inline-diagnostic"
 spec "user.extras.mini-animate"
 spec "user.extras.symbol-usage"
 spec "user.extras.advanced-git-search"
+spec "user.extras.startuptime"
 require "user.lazy"
 -- Disabled
 -- spec "user.alpha" -- Use snacks.dashboard instead
@@ -90,3 +91,5 @@ require "user.lazy"
 -- spec "user.extras.mini-diff"
 -- spec "user.extras.codecompanion"
 -- spec "user.neotest"
+-- spec "user.mini-splitjoin"
+-- spec "user.mini-files"

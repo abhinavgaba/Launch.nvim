@@ -164,6 +164,8 @@ function M.config()
     "fortls",
     "bashls",
     "marksman",
+    "texlab",
+    -- "ltex-ls",
   }
 
   local default_diagnostic_config = {
