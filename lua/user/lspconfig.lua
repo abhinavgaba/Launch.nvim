@@ -32,7 +32,6 @@ local function lsp_keymaps(bufnr)
   keymap("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts_with_desc("Hover Info (LSP)"))
   keymap("n", "gI", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts_with_desc("Implementation (LSP)"))
   keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts_with_desc("References (LSP)"))
-  keymap("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts_with_desc("Line Diagnostic Float (LSP)"))
 
   -- Use tiny-inline-diagnostic shortcuts to show diagnostics floats, if available
   local diagnostic_goto_fn = function(next, severity)
@@ -122,6 +121,7 @@ M.on_attach = function(client, bufnr)
   local signature_config = {
     -- Setup options for lsp_signature
     hint_prefix = icons.misc.Dog .. " ",
+    max_height = 30,
   }
   lsp_signature.on_attach(signature_config, bufnr)
 end

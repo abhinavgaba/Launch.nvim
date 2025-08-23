@@ -145,133 +145,134 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 
+-- The following no longer seem necessary.
 
--- Autocmds to detach clangd when a git diff window is open.
--- Table to track which buffers have had clangd detached
-local clangd_detached_buffers = {}
-
--- Helper function to check if a buffer's name starts with specific prefixes
-local function is_special_buffer(bufnr)
-  local filename = vim.api.nvim_buf_get_name(bufnr)
-  return filename:match("^fugitive:") or filename:match("^diffview:") or filename:match("^gitsigns:")
-end
-
--- Helper function to safely get buffer from a window
-local function safe_get_buf_from_win(win)
-  if vim.api.nvim_win_is_valid(win) then
-    local success, buf = pcall(vim.api.nvim_win_get_buf, win)
-    if success then
-      return buf
-    end
-  end
-  return nil
-end
-
--- Get a human-readable name for a buffer
-local function get_buffer_name(bufnr)
-  return vim.api.nvim_buf_get_name(bufnr) or "<unnamed>"
-end
-
--- Check if any visible window still has a special buffer
-local function has_visible_special_buffers()
-  for _, win in ipairs(vim.api.nvim_list_wins()) do
-    local buf = safe_get_buf_from_win(win)
-    if buf and is_special_buffer(buf) then
-      return true
-    end
-  end
-  return false
-end
-
--- Detach clangd from a buffer
-local function detach_clangd_from_buffer(bufnr)
-  if not clangd_detached_buffers[bufnr] then
-    local clients = vim.lsp.get_clients({ bufnr = bufnr })
-    for _, client in ipairs(clients) do
-      if client.name == "clangd" then
-        vim.lsp.buf_detach_client(bufnr, client.id)
-        clangd_detached_buffers[bufnr] = true
-        vim.notify(
-          string.format("Detached clangd for buffer %d (%s)", bufnr, get_buffer_name(bufnr)),
-          vim.log.levels.INFO
-        )
-      end
-    end
-  end
-end
-
--- Reattach clangd to a buffer
-local function reattach_clangd_to_buffer(bufnr)
-  if clangd_detached_buffers[bufnr] then
-    local clients = vim.lsp.get_clients()
-    for _, client in ipairs(clients) do
-      if client.name == "clangd" then
-        vim.lsp.buf_attach_client(bufnr, client.id)
-        clangd_detached_buffers[bufnr] = nil
-        vim.notify(
-          string.format("Reattached clangd for buffer %d (%s)", bufnr, get_buffer_name(bufnr)),
-          vim.log.levels.INFO
-        )
-      end
-    end
-  end
-end
-
--- Autocmd to reattach clangd when a special buffer is closed
-vim.api.nvim_create_autocmd("BufWinLeave", {
-  callback = function(args)
-    local bufnr = args.buf
-    if is_special_buffer(bufnr) then
-      vim.defer_fn(function()
-        if not has_visible_special_buffers() then
-          for _, win in ipairs(vim.api.nvim_list_wins()) do
-            local buf = safe_get_buf_from_win(win)
-            if buf then
-              reattach_clangd_to_buffer(buf)
-            end
-          end
-        end
-      end, 50) -- 50ms delay to allow state to settle
-    end
-  end,
-})
-
--- Autocmd to handle entering windows with special or non-special buffers
-vim.api.nvim_create_autocmd("BufWinEnter", {
-  callback = function(args)
-    local bufnr = args.buf
-    if is_special_buffer(bufnr) then
-      -- Detach clangd from all visible non-special buffers
-      for _, win in ipairs(vim.api.nvim_list_wins()) do
-        local buf = safe_get_buf_from_win(win)
-        if buf then
-          detach_clangd_from_buffer(buf)
-        end
-      end
-    else
-      -- If no special buffers are visible, reattach clangd to this buffer if it was detached
-      if not has_visible_special_buffers() then
-        reattach_clangd_to_buffer(bufnr)
-      end
-    end
-  end,
-})
-
--- Autocmd to handle late attachment of clangd
-vim.api.nvim_create_autocmd("LspAttach", {
-  callback = function(args)
-    local bufnr = args.buf
-    local client = vim.lsp.get_client_by_id(args.data.client_id)
-    if client and client.name == "clangd" then
-      -- Check if clangd should be detached for this buffer
-      if has_visible_special_buffers() then
-        detach_clangd_from_buffer(bufnr)
-        vim.notify(
-          string.format("Detached clangd from buffer %d (%s) after late attach", bufnr, get_buffer_name(bufnr)),
-          vim.log.levels.INFO
-        )
-      end
-    end
-  end,
-})
+-- -- Autocmds to detach clangd when a git diff window is open.
+-- -- Table to track which buffers have had clangd detached
+-- local clangd_detached_buffers = {}
+--
+-- -- Helper function to check if a buffer's name starts with specific prefixes
+-- local function is_special_buffer(bufnr)
+--   local filename = vim.api.nvim_buf_get_name(bufnr)
+--   return filename:match("^fugitive:") or filename:match("^diffview:") or filename:match("^gitsigns:")
+-- end
+--
+-- -- Helper function to safely get buffer from a window
+-- local function safe_get_buf_from_win(win)
+--   if vim.api.nvim_win_is_valid(win) then
+--     local success, buf = pcall(vim.api.nvim_win_get_buf, win)
+--     if success then
+--       return buf
+--     end
+--   end
+--   return nil
+-- end
+--
+-- -- Get a human-readable name for a buffer
+-- local function get_buffer_name(bufnr)
+--   return vim.api.nvim_buf_get_name(bufnr) or "<unnamed>"
+-- end
+--
+-- -- Check if any visible window still has a special buffer
+-- local function has_visible_special_buffers()
+--   for _, win in ipairs(vim.api.nvim_list_wins()) do
+--     local buf = safe_get_buf_from_win(win)
+--     if buf and is_special_buffer(buf) then
+--       return true
+--     end
+--   end
+--   return false
+-- end
+--
+-- -- Detach clangd from a buffer
+-- local function detach_clangd_from_buffer(bufnr)
+--   if not clangd_detached_buffers[bufnr] then
+--     local clients = vim.lsp.get_clients({ bufnr = bufnr })
+--     for _, client in ipairs(clients) do
+--       if client.name == "clangd" then
+--         vim.lsp.buf_detach_client(bufnr, client.id)
+--         clangd_detached_buffers[bufnr] = true
+--         vim.notify(
+--           string.format("Detached clangd for buffer %d (%s)", bufnr, get_buffer_name(bufnr)),
+--           vim.log.levels.INFO
+--         )
+--       end
+--     end
+--   end
+-- end
+--
+-- -- Reattach clangd to a buffer
+-- local function reattach_clangd_to_buffer(bufnr)
+--   if clangd_detached_buffers[bufnr] then
+--     local clients = vim.lsp.get_clients()
+--     for _, client in ipairs(clients) do
+--       if client.name == "clangd" then
+--         vim.lsp.buf_attach_client(bufnr, client.id)
+--         clangd_detached_buffers[bufnr] = nil
+--         vim.notify(
+--           string.format("Reattached clangd for buffer %d (%s)", bufnr, get_buffer_name(bufnr)),
+--           vim.log.levels.INFO
+--         )
+--       end
+--     end
+--   end
+-- end
+--
+-- -- Autocmd to reattach clangd when a special buffer is closed
+-- vim.api.nvim_create_autocmd("BufWinLeave", {
+--   callback = function(args)
+--     local bufnr = args.buf
+--     if is_special_buffer(bufnr) then
+--       vim.defer_fn(function()
+--         if not has_visible_special_buffers() then
+--           for _, win in ipairs(vim.api.nvim_list_wins()) do
+--             local buf = safe_get_buf_from_win(win)
+--             if buf then
+--               reattach_clangd_to_buffer(buf)
+--             end
+--           end
+--         end
+--       end, 50) -- 50ms delay to allow state to settle
+--     end
+--   end,
+-- })
+--
+-- -- Autocmd to handle entering windows with special or non-special buffers
+-- vim.api.nvim_create_autocmd("BufWinEnter", {
+--   callback = function(args)
+--     local bufnr = args.buf
+--     if is_special_buffer(bufnr) then
+--       -- Detach clangd from all visible non-special buffers
+--       for _, win in ipairs(vim.api.nvim_list_wins()) do
+--         local buf = safe_get_buf_from_win(win)
+--         if buf then
+--           detach_clangd_from_buffer(buf)
+--         end
+--       end
+--     else
+--       -- If no special buffers are visible, reattach clangd to this buffer if it was detached
+--       if not has_visible_special_buffers() then
+--         reattach_clangd_to_buffer(bufnr)
+--       end
+--     end
+--   end,
+-- })
+--
+-- -- Autocmd to handle late attachment of clangd
+-- vim.api.nvim_create_autocmd("LspAttach", {
+--   callback = function(args)
+--     local bufnr = args.buf
+--     local client = vim.lsp.get_client_by_id(args.data.client_id)
+--     if client and client.name == "clangd" then
+--       -- Check if clangd should be detached for this buffer
+--       if has_visible_special_buffers() then
+--         detach_clangd_from_buffer(bufnr)
+--         vim.notify(
+--           string.format("Detached clangd from buffer %d (%s) after late attach", bufnr, get_buffer_name(bufnr)),
+--           vim.log.levels.INFO
+--         )
+--       end
+--     end
+--   end,
+-- })
 

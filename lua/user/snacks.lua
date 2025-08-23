@@ -8,7 +8,7 @@ local M = {
   ---@type snacks.Config
   opts = {
     animate = {enabled = true},
-    bigfile = { enabled = true },
+    bigfile = { enabled = false },
     dashboard = { enabled = true },
     indent = { enabled = false },
     input = { enabled = true },
@@ -89,9 +89,9 @@ function M.init()
       -- Snacks.toggle.indent():map "<leader>tg"
       Snacks.toggle.dim():map "<leader>tD"
       -- Toggle the profiler
-      Snacks.toggle.profiler():map("<leader>pp")
+      Snacks.toggle.profiler():map("<leader>Pp")
       -- Toggle the profiler highlights
-      Snacks.toggle.profiler_highlights():map("<leader>ph")
+      Snacks.toggle.profiler_highlights():map("<leader>Ph")
     end
   )
 end

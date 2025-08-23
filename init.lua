@@ -53,6 +53,7 @@ spec "user.extras.fidget" -- noice does this too
 spec "user.todo-comments"
 spec "user.mini-ai"
 spec "user.mini-align"
+spec "user.yanky"
 spec "user.extras.treesj"
 spec "user.extras.bqf"
 spec "user.extras.dial"
