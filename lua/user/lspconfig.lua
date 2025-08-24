@@ -168,9 +168,34 @@ function M.config()
     -- "ltex-ls",
   }
 
+  local signs = {
+    Error = icons.diagnostics.Error,
+    Warn = icons.diagnostics.Warning,
+    Hint = icons.diagnostics.Hint,
+    Info = icons.diagnostics.Information,
+  }
+
   local default_diagnostic_config = {
     signs = {
       active = true,
+      text = {
+        [vim.diagnostic.severity.ERROR] = signs.Error,
+        [vim.diagnostic.severity.WARN] = signs.Warn,
+        [vim.diagnostic.severity.HINT] = signs.Hint,
+        [vim.diagnostic.severity.INFO] = signs.Info,
+      },
+      texthl = {
+        [vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
+        [vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
+        [vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
+        [vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
+      },
+      numhl = {
+        [vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
+        [vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
+        [vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
+        [vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
+      },
     },
     virtual_text = false,
     update_in_insert = false,
@@ -187,18 +212,6 @@ function M.config()
   }
 
   vim.diagnostic.config(default_diagnostic_config)
-
-  local signs = {
-    Error = icons.diagnostics.Error,
-    Warn = icons.diagnostics.Warning,
-    Hint = icons.diagnostics.Hint,
-    Info = icons.diagnostics.Information,
-  }
-
-  for type, icon in pairs(signs) do
-    local hl = "DiagnosticSign" .. type
-    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-  end
 
   vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
   vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })

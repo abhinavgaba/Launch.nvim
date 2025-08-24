@@ -1,4 +1,4 @@
--- mini-surround config based on LazyVim
+-- mini-surround config using LazyVim's keymaps
 local M = {
   "echasnovski/mini.surround",
   event = "VeryLazy",
