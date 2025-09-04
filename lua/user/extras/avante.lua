@@ -87,7 +87,6 @@ local M = {
       copilot = {
         model = "claude-sonnet-4",
         disabled_tools = { "web_search" },
-        proxy = "http://proxy-dmz.intel.com:911",
       },
     },
     hints = { enabled = true },
