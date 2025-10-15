@@ -2,10 +2,11 @@ local M = {
   "saghen/blink.cmp",
   event = "InsertEnter",
   -- optional: provides snippets for the snippet source
-  dependencies = "rafamadriz/friendly-snippets",
+  -- dependencies = "rafamadriz/friendly-snippets",
+  dependencies = { "fang2hou/blink-copilot" },
 
   -- use a release tag to download pre-built binaries
-  version = "v0.*",
+  version = "v1.*",
   ---@module 'blink.cmp'
   ---@type blink.cmp.Config
   opts = {
@@ -24,6 +25,26 @@ local M = {
       ["<c-f>"] = {},
       ["<c-u>"] = { "scroll_documentation_up", "fallback" },
       ["<c-d>"] = { "scroll_documentation_down", "fallback" },
+    -- Keymap needed with copilot-lsp, to enable NES, but copilot.lua handles
+    -- this mapping by itself.
+    --   ["<Tab>"] = {
+    --     function(cmp)
+    --       if vim.b[vim.api.nvim_get_current_buf()].nes_state then
+    --         cmp.hide()
+    --         return (
+    --           require("copilot-lsp.nes").apply_pending_nes()
+    --           and require("copilot-lsp.nes").walk_cursor_end_edit()
+    --         )
+    --       end
+    --       if cmp.snippet_active() then
+    --         return cmp.accept()
+    --       else
+    --         return cmp.select_and_accept()
+    --       end
+    --     end,
+    --     "snippet_forward",
+    --     "fallback",
+    --   },
     },
     completion = {
       documentation = {
@@ -45,10 +66,16 @@ local M = {
     -- default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = { "lsp", "path", "snippets", "buffer" },
+      default = { "copilot", "lsp", "path", "buffer" },
       -- optionally disable cmdline completions
       -- cmdline = {},
       providers = {
+        copilot = {
+          name = "copilot",
+          module = "blink-copilot",
+          score_offset = 1000,
+          async = true,
+        },
         lsp = {
           score_offset = 400,
         },

@@ -3,19 +3,31 @@ local M = {
   cmd = "Copilot",
   event = "InsertEnter",
   dependencies = {
-    "zbirenbaum/copilot-cmp",
+    "copilotlsp-nvim/copilot-lsp",
+    init = function()
+      vim.g.copilot_nes_debounce = 500
+    end,
   },
 }
 
 M.opts = {
-  panel = {
+  nes = {
+    enabled = true,
     keymap = {
-      jump_next = "<a-j>",
-      jump_prev = "<a-k>",
-      accept = "<a-l>",
-      refresh = "r",
-      open = "<a-c>",
+      accept_and_goto = "<leader><space>",
+      accept = "<s-space>",
+      dismiss = "<Esc>",
     },
+  },
+  panel = {
+    enabled = false,
+  --   keymap = {
+  --     jump_next = "<a-j>",
+  --     jump_prev = "<a-k>",
+  --     accept = "<a-l>",
+  --     refresh = "r",
+  --     open = "<a-c>",
+  --   },
   },
   suggestion = {
     -- Use blink for suggestions
@@ -30,7 +42,7 @@ M.opts = {
   },
   filetypes = {
     markdown = true,
-    help = false,
+    help = true,
     gitcommit = false,
     gitrebase = false,
     hgcommit = false,
