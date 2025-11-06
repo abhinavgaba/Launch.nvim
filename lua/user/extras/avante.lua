@@ -85,7 +85,7 @@ local M = {
     auto_suggestions_provider = "copilot",
     providers = {
       copilot = {
-        model = "claude-sonnet-4",
+        model = "claude-haiki-4.5",
         disabled_tools = { "web_search" },
       },
     },
