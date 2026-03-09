@@ -81,15 +81,28 @@ local M = {
   },
   build = "make",
   opts = {
-    provider = "copilot",
-    auto_suggestions_provider = "copilot",
+    provider = "claude-code",
+    acp_providers = {
+      ["claude-code"] = {
+        command = "npx",
+        args = { "@zed-industries/claude-agent-acp" },
+        env = {
+          CLAUDE_CODE_USE_BEDROCK = "1",
+          AWS_REGION = os.getenv "AWS_REGION",
+          AWS_BEARER_TOKEN_BEDROCK = os.getenv "AWS_BEARER_TOKEN_BEDROCK",
+          HTTPS_PROXY = os.getenv "HTTPS_PROXY" or os.getenv "https_proxy",
+        },
+      },
+    },
+    --provider = "copilot",
+    auto_suggestions_provider = nil,
     providers = {
       copilot = {
         model = "claude-haiku-4.5",
         disabled_tools = { "web_search" },
       },
     },
-    hints = { enabled = true },
+    hints = { enabled = false },
     file_selector = {
       provider = "fzf",
       provider_opts = {},
