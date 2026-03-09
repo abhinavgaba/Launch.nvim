@@ -25,26 +25,15 @@ local M = {
       ["<c-f>"] = {},
       ["<c-u>"] = { "scroll_documentation_up", "fallback" },
       ["<c-d>"] = { "scroll_documentation_down", "fallback" },
-    -- Keymap needed with copilot-lsp, to enable NES, but copilot.lua handles
-    -- this mapping by itself.
-    --   ["<Tab>"] = {
-    --     function(cmp)
-    --       if vim.b[vim.api.nvim_get_current_buf()].nes_state then
-    --         cmp.hide()
-    --         return (
-    --           require("copilot-lsp.nes").apply_pending_nes()
-    --           and require("copilot-lsp.nes").walk_cursor_end_edit()
-    --         )
-    --       end
-    --       if cmp.snippet_active() then
-    --         return cmp.accept()
-    --       else
-    --         return cmp.select_and_accept()
-    --       end
-    --     end,
-    --     "snippet_forward",
-    --     "fallback",
-    --   },
+      -- Custom tab keymap to work with sidekick's NES.
+      ["<Tab>"] = {
+        "snippet_forward",
+        function()
+          return require("sidekick").nes_jump_or_apply()
+        end,
+        "select_and_accept",
+        "fallback",
+      },
     },
     completion = {
       documentation = {

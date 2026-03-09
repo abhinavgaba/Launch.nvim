@@ -2,23 +2,9 @@ local M = {
   "zbirenbaum/copilot.lua",
   cmd = "Copilot",
   event = "InsertEnter",
-  dependencies = {
-    "copilotlsp-nvim/copilot-lsp",
-    init = function()
-      vim.g.copilot_nes_debounce = 500
-    end,
-  },
 }
 
 M.opts = {
-  nes = {
-    enabled = true,
-    keymap = {
-      accept_and_goto = "<leader><space>",
-      accept = "<s-space>",
-      dismiss = "<Esc>",
-    },
-  },
   panel = {
     enabled = false,
   --   keymap = {
