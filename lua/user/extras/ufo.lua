@@ -75,7 +75,7 @@ function M.config()
 
   require("ufo").setup {
     fold_virt_text_handler = handler,
-    close_fold_kinds = { "imports" },
+    close_fold_kinds_for_ft = { default = { "imports" } },
 
     -- provider_selector = function(bufnr, filetype, buftype)
     --   if is_git_file(bufnr) then
