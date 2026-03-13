@@ -1,7 +1,29 @@
+local langs = {
+  "asm",
+  "bash",
+  "c",
+  "cpp",
+  "cmake",
+  "diff",
+  "fortran",
+  "llvm",
+  "lua",
+  "make",
+  "markdown",
+  "markdown_inline",
+  "ssh_config",
+  "tablegen",
+  "vim",
+}
+
 local M = {
   "nvim-treesitter/nvim-treesitter",
   event = { "BufReadPost", "BufNewFile" },
-  build = ":TSUpdate",
+  build = function()
+    local ts = require("nvim-treesitter")
+    ts.install(langs)
+    ts.update()
+  end,
 }
 
 -- function M.disableNvimTS(_, buf)
@@ -21,31 +43,12 @@ local M = {
 -- end
 
 function M.config()
-  require("nvim-treesitter.configs").setup {
-    ensure_installed = {
-      "asm",
-      "bash",
-      "c",
-      "cpp",
-      "cmake",
-      "diff",
-      "fortran",
-      "llvm",
-      "lua",
-      "make",
-      "markdown",
-      "markdown_inline",
-      "ssh_config",
-      "tablegen",
-      "vim",
-    },
-
-    highlight = { enable = true },
-    indent = { enable = true },
-    -- highlight = { enable = true, disable = M.disableNvimTS },
-    -- indent = { enable = true, disable = M.disableNvimTS },
-    additional_vim_regex_highlighting = false,
-  }
+  -- Enable treesitter highlighting per buffer
+  vim.api.nvim_create_autocmd("FileType", {
+    callback = function(args)
+      pcall(vim.treesitter.start, args.buf)
+    end,
+  })
 end
 
 return M
