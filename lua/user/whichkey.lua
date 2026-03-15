@@ -19,6 +19,7 @@ M.opts = {
       { "<leader>s", group = "search" },
       { "<leader>gd", group = "diff vs ..." },
       { "<leader>gC", group = "codediff" },
+      { "<leader>cc", group = "claude-code" },
       { "<leader>u", group = "ui", icon = { icon = "󰙵 ", color = "cyan" } },
       { "<leader>x", group = "diagnostics/quickfix", icon = { icon = "󱖫 ", color = "green" } },
       { "<leader>t", group = "toggles" },

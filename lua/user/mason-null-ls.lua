@@ -17,7 +17,7 @@ M.opts = {
     -- "prettier",
     "stylua",
     "codelldb",
-    -- "copilot-language-server",
+    "copilot-language-server",
     "bash-language-server",
   },
   automatic_installation = false,
