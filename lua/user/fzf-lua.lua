@@ -139,7 +139,7 @@ M.keys = {
   { "<leader>fR", "<md>lua require('fzf-lua').oldfiles({cwd_only=true})<cr>", desc = "Recent (cwd)" },
   { "<leader>ft", "<cmd>FzfLua tabs<cr>", desc = "Tabs" },
   -- git
-  { "<leader>gc", "<cmd>FzfLua git_commits<CR>", desc = "Commits" },
+  { "<leader>gC", "<cmd>FzfLua git_commits<CR>", desc = "Commits" },
   { "<leader>gS", "<cmd>FzfLua git_status<CR>", desc = "Status" },
   -- search
   { '<leader>s"', "<cmd>FzfLua registers<cr>", desc = "Registers" },
