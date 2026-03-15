@@ -96,11 +96,16 @@ local function lsp_keymaps(bufnr)
   if actions_preview_present then
     keymap({"n", "v"}, "<leader>la", function() require("actions-preview").code_actions() end, opts_with_desc("Code Action (w/ Preview)"))
   end
+
 end
 
 --- @type vim.lsp.client.on_attach_cb
 M.on_attach = function(client, bufnr)
   lsp_keymaps(bufnr)
+
+  if client.name == "clangd" then
+    vim.keymap.set("n", "<leader>ch", "<cmd>LspClangdSwitchSourceHeader<cr>", { buffer = bufnr, desc = "Switch Source/Header (C/C++)" })
+  end
 
   -- if client.supports_method "textDocument/inlayHint" then
   --   vim.lsp.inlay_hint.enable(true, { bufnr })
@@ -155,7 +160,6 @@ function M.toggle_diagnostics()
 end
 
 function M.config()
-  local lspconfig = require "lspconfig"
   local icons = require "user.icons"
 
   local servers = {
@@ -215,17 +219,19 @@ function M.config()
 
   vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
   vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
-  require("lspconfig.ui.windows").default_options.border = "rounded"
 
+  -- Common capabilities for all servers
+  vim.lsp.config("*", {
+    capabilities = M.common_capabilities(),
+  })
+
+  -- Per-server configuration
   for _, server in pairs(servers) do
-    local opts = {
-      on_attach = M.on_attach,
-      capabilities = M.common_capabilities(),
-    }
+    local opts = {}
 
     local lsp_settings_present, settings = pcall(require, "user.lspsettings." .. server)
     if lsp_settings_present then
-      opts = vim.tbl_deep_extend("force", settings, opts)
+      opts = vim.tbl_deep_extend("force", opts, settings)
     end
 
     if server == "lua_ls" then
@@ -233,11 +239,8 @@ function M.config()
     end
 
     if server == "clangd" then
-      opts = vim.tbl_deep_extend("force", {
+      opts = vim.tbl_deep_extend("force", opts, {
         filetypes = { "c", "cpp" },
-        keys = {
-          { "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
-        },
         capabilities = {
           offsetEncoding = { "utf-16" },
         },
@@ -246,11 +249,21 @@ function M.config()
           completeUnimported = true,
           clangdFileStatus = true,
         },
-      }, opts)
+      })
     end
 
-    lspconfig[server].setup(opts)
+    vim.lsp.config(server, opts)
   end
+
+  vim.lsp.enable(servers)
+
+  -- on_attach via LspAttach autocmd
+  vim.api.nvim_create_autocmd("LspAttach", {
+    callback = function(args)
+      local client = vim.lsp.get_client_by_id(args.data.client_id)
+      M.on_attach(client, args.buf)
+    end,
+  })
 end
 
 return M
