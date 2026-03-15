@@ -19,11 +19,7 @@ local langs = {
 local M = {
   "nvim-treesitter/nvim-treesitter",
   event = { "BufReadPost", "BufNewFile" },
-  build = function()
-    local ts = require("nvim-treesitter")
-    ts.install(langs)
-    ts.update()
-  end,
+  build = ":TSUpdate",
 }
 
 -- function M.disableNvimTS(_, buf)
@@ -43,12 +39,11 @@ local M = {
 -- end
 
 function M.config()
-  -- Enable treesitter highlighting per buffer
-  vim.api.nvim_create_autocmd("FileType", {
-    callback = function(args)
-      pcall(vim.treesitter.start, args.buf)
-    end,
-  })
+  require("nvim-treesitter.configs").setup {
+    ensure_installed = langs,
+    highlight = { enable = true, additional_vim_regex_highlighting = false },
+    indent = { enable = true },
+  }
 end
 
 return M
