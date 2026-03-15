@@ -3,8 +3,8 @@ local M = {
   cmd = "CodeDiff",
   build = ":CodeDiff install",
   keys = {
-    { "<leader>gco", "<cmd>CodeDiff HEAD<CR>", desc = "Open (against HEAD)" },
-    { "<leader>gcO", "<cmd>CodeDiff<CR>", desc = "Open (staged/unstaged)" },
+    { "<leader>gco", "<cmd>CodeDiff<CR>", desc = "Open explorer" },
+    { "<leader>gcd", "<cmd>CodeDiff file HEAD<CR>", desc = "Diff current file (vs HEAD)" },
     { "<leader>gch", "<cmd>CodeDiff history<CR>", desc = "History" },
     { "<leader>gcv", ":CodeDiffViewCommit<CR>", mode = { "n", "v" }, desc = "View Commit" },
   },
