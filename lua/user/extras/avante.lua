@@ -102,7 +102,14 @@ local M = {
         disabled_tools = { "web_search" },
       },
     },
-    hints = { enabled = false },
+    behaviour = {
+      auto_apply_diff_after_generation = false, -- Don't auto-apply diffs
+      minimize_diff = true,
+      auto_approve_tool_permissions = false,
+    },
+    selection = {
+      hint_display = "none", -- "none" | "immediate" | "delayed"
+    },
     file_selector = {
       provider = "fzf",
       provider_opts = {},
