@@ -39,8 +39,39 @@ local M = {
 --   -- end
 -- end
 
+local function wait_for_treesitter_cli(on_ready)
+  local attempts = 0
+  local max_attempts = 10
+  local interval = 2000 -- ms
+
+  local timer = vim.uv.new_timer()
+  timer:start(interval, interval, vim.schedule_wrap(function()
+    attempts = attempts + 1
+    if vim.fn.executable "tree-sitter" == 1 then
+      timer:stop()
+      timer:close()
+      on_ready()
+    elseif attempts >= max_attempts then
+      timer:stop()
+      timer:close()
+      vim.notify(
+        "nvim-treesitter: tree-sitter CLI not found. Run :MasonInstall tree-sitter-cli",
+        vim.log.levels.WARN
+      )
+    end
+  end))
+end
+
 function M.config()
-  require("nvim-treesitter.install").install(langs)
+  local function install()
+    require("nvim-treesitter.install").install(langs)
+  end
+
+  if vim.fn.executable "tree-sitter" == 1 then
+    install()
+  else
+    wait_for_treesitter_cli(install)
+  end
 end
 
 return M
