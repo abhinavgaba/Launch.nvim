@@ -18,6 +18,7 @@ local langs = {
 
 local M = {
   "nvim-treesitter/nvim-treesitter",
+  dependencies = { "jay-babu/mason-null-ls.nvim" },
   event = { "BufReadPost", "BufNewFile" },
   build = ":TSUpdate",
 }
@@ -39,11 +40,7 @@ local M = {
 -- end
 
 function M.config()
-  require("nvim-treesitter.configs").setup {
-    ensure_installed = langs,
-    highlight = { enable = true, additional_vim_regex_highlighting = false },
-    indent = { enable = true },
-  }
+  require("nvim-treesitter.install").install(langs)
 end
 
 return M

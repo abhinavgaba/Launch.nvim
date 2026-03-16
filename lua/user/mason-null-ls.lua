@@ -16,6 +16,7 @@ M.opts = {
     "fprettify",
     -- "prettier",
     "stylua",
+    "tree-sitter-cli",
     "codelldb",
     "copilot-language-server",
     "bash-language-server",
