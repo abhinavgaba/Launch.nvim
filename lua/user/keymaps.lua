@@ -94,6 +94,83 @@ local function set_keymaps()
 
   keymap("n", "<leader>bD", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
 
+  -- Close all git diff views (DiffView, CodeDiff, Gitsigns, Fugitive)
+  keymap("n", "<leader>gQ", function()
+    local closed_something = false
+
+    -- Close DiffView
+    local ok = pcall(vim.cmd, "DiffviewClose")
+    if ok then
+      closed_something = true
+    end
+
+    -- Handle CodeDiff: close it but keep the file open
+    local ok_codediff, session_mod = pcall(require, "codediff.ui.lifecycle.session")
+    if ok_codediff then
+      local tabpage = vim.api.nvim_get_current_tabpage()
+      local session = session_mod.get_active_diffs()[tabpage]
+      if session then
+        -- Get the file path we're viewing (prefer modified path, which is usually the working file)
+        local file_path = session.modified_path
+        if file_path and session.modified_revision ~= "WORKING" then
+          file_path = session.original_path
+        end
+
+        -- Convert to absolute path
+        if file_path and session.git_root then
+          file_path = vim.fn.fnamemodify(session.git_root .. "/" .. file_path, ":p")
+
+          -- Check if this file is already open in another tab
+          local found_tab = nil
+          for _, tp in ipairs(vim.api.nvim_list_tabpages()) do
+            if tp ~= tabpage then
+              for _, win in ipairs(vim.api.nvim_tabpage_list_wins(tp)) do
+                local buf = vim.api.nvim_win_get_buf(win)
+                local bufname = vim.api.nvim_buf_get_name(buf)
+                if bufname == file_path then
+                  found_tab = tp
+                  break
+                end
+              end
+            end
+            if found_tab then break end
+          end
+
+          -- Close current CodeDiff tab
+          vim.cmd("tabclose")
+
+          if found_tab then
+            -- Switch to the tab with the file
+            vim.api.nvim_set_current_tabpage(found_tab)
+          else
+            -- Open the file in current tab
+            vim.cmd("edit " .. vim.fn.fnameescape(file_path))
+          end
+        else
+          -- No file path, just close the tab
+          vim.cmd("tabclose")
+        end
+
+        closed_something = true
+        return
+      end
+    end
+
+    -- Close Gitsigns and Fugitive windows
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      local buf = vim.api.nvim_win_get_buf(win)
+      local bufname = vim.api.nvim_buf_get_name(buf)
+      if bufname:match("^gitsigns:") or bufname:match("^fugitive://") then
+        vim.api.nvim_win_close(win, false)
+        closed_something = true
+      end
+    end
+
+    if not closed_something then
+      vim.notify("No git diff views open", vim.log.levels.INFO)
+    end
+  end, { desc = "Close All Git Diffs" })
+
   -- Clear search, diff update and redraw
   -- taken from runtime/lua/_editor.lua
   keymap(

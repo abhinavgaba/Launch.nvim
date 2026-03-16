@@ -73,8 +73,7 @@ local function set_keymaps(bufnr)
     map('n', "<leader>gD", closeGitsignsWindows, {desc = "Diff Close"})
     map('n', "<leader>gdq", closeGitsignsWindows, {desc = "Diff Close"})
     map('n', "<leader>gR", gitsigns.reset_buffer, {desc = "Reset Buffer"})
-    map('n', "<leader>gdc", gitSignsDiffVsCword, {desc = "Diff vs Commit-under-Cursor"})
-    map('n', "<leader>gdp", gitSignsDiffVsCwordParent, {desc = "Diff vs Commit-under-Cursor's Parent"})
+    -- Note: gdc and gdp are set globally in M.config() so they work from popups
     map('n', "<leader>gdh", function() gitsigns.diffthis('HEAD') end, {desc = "Diff vs HEAD"})
     map('n', "<leader>gdH", function() gitsigns.diffthis('HEAD^') end, {desc = "Diff vs HEAD's parent"})
     map('n', "<leader>gds", gitsigns.diffthis, {desc = "Diff vs Staged"})
@@ -137,6 +136,11 @@ M.opts = {
     col = 1,
   },
   on_attach = set_keymaps,
+}
+
+M.keys = {
+  { "<leader>gdc", gitSignsDiffVsCword, desc = "Diff vs Commit-under-Cursor" },
+  { "<leader>gdp", gitSignsDiffVsCwordParent, desc = "Diff vs Commit-under-Cursor's Parent" },
 }
 
 return M
