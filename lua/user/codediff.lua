@@ -1,3 +1,19 @@
+-- Toggle CodeDiff: close if open, otherwise open explorer
+local function toggle_codediff()
+  local ok, session_mod = pcall(require, "codediff.ui.lifecycle.session")
+  if ok then
+    local tabpage = vim.api.nvim_get_current_tabpage()
+    local session = session_mod.get_active_diffs()[tabpage]
+    if session then
+      vim.cmd("tabclose")
+    else
+      vim.cmd("CodeDiff")
+    end
+  else
+    vim.cmd("CodeDiff")
+  end
+end
+
 local M = {
   "esmuellert/codediff.nvim",
   cmd = "CodeDiff",
@@ -7,6 +23,7 @@ local M = {
     { "<leader>gcd", "<cmd>CodeDiff file HEAD<CR>", desc = "Diff current file (vs HEAD)" },
     { "<leader>gch", "<cmd>CodeDiff history<CR>", desc = "History" },
     { "<leader>gcv", ":CodeDiffViewCommit<CR>", mode = { "n", "v" }, desc = "View Commit" },
+    { "<leader>gct", toggle_codediff, desc = "Toggle CodeDiff" },
   },
 }
 
