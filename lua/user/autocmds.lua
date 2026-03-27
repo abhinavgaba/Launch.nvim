@@ -101,7 +101,7 @@ vim.api.nvim_create_user_command(
 )
 
 vim.api.nvim_create_autocmd("User", {
-  pattern = "LazySync",
+  pattern = { "LazyInstall", "LazyUpdate", "LazySync" },
   callback = function()
     local uv = vim.loop
 

@@ -44,14 +44,20 @@ git clone <this-repo-url> ~/.config/nvim
 
 Run `nvim` and wait for the plugins to be installed.
 
-**TIP**: After the initial install, plugins will be at their latest versions.
-To pin them to the known-good versions recorded in `lazy-lock.json`, run
-`:Lazy restore` inside Neovim. For a headless first-time setup that installs
-and restores in one shot:
+**TIP**: lazy.nvim automatically installs plugins at the versions pinned in
+`lazy-lock.json`, so the first launch already uses the known-good versions.
+A custom autocmd in `lua/user/autocmds.lua` snapshots the lockfile to
+`lockfile_snapshots/` after every `:Lazy sync` or `:Lazy update`
+(up to 50 backups). To roll back after a bad update, copy a snapshot
+back and restore:
 
 ```sh
+cp lockfile_snapshots/<timestamp>_lazy-lock.json lazy-lock.json
 nvim --headless "+Lazy! restore" +qa
 ```
+
+You can also restore from a previously committed lockfile via
+`git checkout <commit> -- lazy-lock.json` followed by `:Lazy restore`.
 
 **NOTE**: Treesitter will pull in parsers the next time you open Neovim.
 
