@@ -2,6 +2,9 @@ local M = {
   "zbirenbaum/copilot.lua",
   cmd = "Copilot",
   event = "InsertEnter",
+  init = function()
+    vim.g.copilot_proxy = os.getenv "HTTPS_PROXY" or os.getenv "https_proxy"
+  end,
 }
 
 M.opts = {
