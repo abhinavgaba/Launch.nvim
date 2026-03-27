@@ -15,14 +15,6 @@ local M = {
     -- "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
     "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
     {
-      "zbirenbaum/copilot.lua",
-      lazy = true,
-      opts = {
-        panel = { enabled = false },
-        suggestion = { enabled = false },
-      },
-    },
-    {
       "MeanderingProgrammer/render-markdown.nvim",
       opts = {
         file_types = { "Avante" },
@@ -94,15 +86,7 @@ local M = {
         },
       },
     },
-    --provider = "copilot",
     auto_suggestions_provider = nil,
-    providers = {
-      copilot = {
-        model = "claude-haiku-4.5",
-        disabled_tools = { "web_search" },
-        HTTPS_PROXY = os.getenv "HTTPS_PROXY" or os.getenv "https_proxy",
-      },
-    },
     behaviour = {
       auto_apply_diff_after_generation = false, -- Don't auto-apply diffs
       minimize_diff = true,
