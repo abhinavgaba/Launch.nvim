@@ -63,6 +63,14 @@ local function wait_for_treesitter_cli(on_ready)
 end
 
 function M.config()
+  -- New nvim-treesitter (main branch) only manages parser installation.
+  -- Highlighting and indent must be enabled per-buffer via Neovim's API.
+  vim.api.nvim_create_autocmd("FileType", {
+    callback = function(args)
+      pcall(vim.treesitter.start, args.buf)
+    end,
+  })
+
   local function install()
     require("nvim-treesitter.install").install(langs)
   end
