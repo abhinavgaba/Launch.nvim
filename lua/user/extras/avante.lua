@@ -100,6 +100,7 @@ local M = {
       copilot = {
         model = "claude-haiku-4.5",
         disabled_tools = { "web_search" },
+        HTTPS_PROXY = os.getenv "HTTPS_PROXY" or os.getenv "https_proxy",
       },
     },
     behaviour = {
