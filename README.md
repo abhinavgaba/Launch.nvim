@@ -1,95 +1,80 @@
+# Neovim Config
+
+Personal Neovim configuration, originally forked from [Launch.nvim](https://github.com/LunarVim/Launch.nvim) and heavily customized.
+
+## Structure
+
 ```
-    ✯                              .°•    |    
-    __     °    •                __      / \   
-   / /   ____ ___  ______  _____/ /_    | O |  
-  / /   / __ `/ / / / __ \/ ___/ __ \   | O |  
- / /___/ /_/ / /_/ / / / / /__/ / / /  /| | |\ 
-/_____/\__,_/\__,_/_/ /_/\___/_/ /_/  /_(.|.)_\
+init.lua                    → Entry point, registers all plugin specs
+lua/user/launch.lua         → Defines spec() helper, populates LAZY_PLUGIN_SPEC
+lua/user/lazy.lua           → Bootstraps lazy.nvim with collected specs
+lua/user/options.lua        → Core Neovim options (2-space indent, OSC52 clipboard)
+lua/user/keymaps.lua        → Global keymaps (leader = Space, jk = Escape)
+lua/user/autocmds.lua       → Autocommands
+lua/user/*.lua              → One file per plugin (each returns a LazyPluginSpec)
+lua/user/extras/*.lua       → Optional/experimental plugins (same pattern)
+lua/user/lspsettings/*.lua  → Per-LSP server settings (auto-loaded by lspconfig)
+lua/user/dapsettings/       → DAP debugger configurations
 ```
 
-This config will provide a modular starting point for anyone looking to use Neovim as their IDE. It is meant to be simple and easy to understand and extend. Use it as a base for your own config or just take individual pieces.
+## Key Plugins
 
-All the included plugins are pinned to a version that ensures they are compatible and will not update potentially introducing errors into your config. For every Neovim release I will update this repo along with the community to keep it up to date with the newest versions.
+- **Completion**: blink.nvim
+- **LSP**: lspconfig + Mason (lua_ls, clangd, fortls, bashls, marksman, texlab)
+- **Fuzzy finder**: fzf-lua
+- **Git**: gitsigns, fugitive, neogit, diffview, blame.nvim
+- **Navigation**: flash.nvim, harpoon, nvim-tree, dropbar
+- **AI**: Avante (Claude via ACP), Claude Code integration, Sidekick
+- **UI**: noice, lualine, snacks.nvim, which-key, indentline, rainbow-delimiters
+- **Editing**: mini.ai, mini.surround, mini.align, autopairs, comment, yanky
 
-As I mentioned, this config is meant as a starting point for people new to Neovim who want a familiar IDE experience. The config has a very simple structure that makes it easy to add new plugins.
+## Install Neovim 0.11.6
 
-## Install Neovim 0.9
+You can install Neovim with your package manager (e.g. brew, apt, pacman), but note that updating packages may upgrade Neovim to a newer version.
 
-You can install Neovim with your package manager e.g. brew, apt, pacman etc.. bus remember that when you update your packages Neovim may be upgraded to a newer version.
-
-If you would like to make sure Neovim only updates when you want it to than I recommend installing from source: [instructions](https://github.com/neovim/neovim/wiki/Installing-Neovim#install-from-source)
+To pin to a specific version, install from source: [instructions](https://github.com/neovim/neovim/wiki/Installing-Neovim#install-from-source)
 
 ## Install the config
 
-Make sure to remove or backup your current `nvim` directory
+Make sure to remove or backup your current `nvim` directory:
 
 ```sh
-git clone https://github.com/LunarVim/Launch.nvim.git ~/.config/nvim
+git clone <this-repo-url> ~/.config/nvim
 ```
 
-Run `nvim` and wait for the plugins to be installed
+Run `nvim` and wait for the plugins to be installed.
 
-**NOTE** (You will notice treesitter pulling in a bunch of parsers the next time you open Neovim)
+**NOTE**: Treesitter will pull in parsers the next time you open Neovim.
 
-## Get healthy
+## Prerequisites
 
-Open `nvim` and enter the following:
+Run `:checkhealth` in Neovim to verify your setup.
 
+### Clipboard
+
+- On macOS: `pbcopy` is builtin
+- On Ubuntu:
+  ```sh
+  sudo apt install xsel        # for X11
+  sudo apt install wl-clipboard # for Wayland
+  ```
+
+### ripgrep (required for fzf-lua)
+
+```sh
+sudo apt install ripgrep
 ```
-:checkhealth
-```
 
-You'll probably notice you don't have support for copy/paste also that python and node haven't been setup
+### Node.js
 
-So let's fix that
+Required by Avante (for `npx @zed-industries/claude-agent-acp`).
 
-First we'll fix copy/paste
+### Nerd Font
 
-- On mac `pbcopy` should be builtin
+A font with icon support is required. Install one via [getnf](https://github.com/ronniedroid/getnf).
 
-- On Ubuntu
+## Adding a Plugin
 
-  ```sh
-  sudo apt install xsel # for X11
-  sudo apt install wl-clipboard # for wayland
-  ```
-
-Next we need to install python support (node is optional)
-
-- Neovim python support
-
-  ```sh
-  pip install pynvim
-  ```
-
-- Neovim node support
-
-  ```sh
-  npm i -g neovim
-  ```
-
-We will also need `ripgrep` for Telescope to work:
-
-- Ripgrep
-
-  ```sh
-  sudo apt install ripgrep
-  ```
-
----
-
-**NOTE** make sure you have [node](https://nodejs.org/en/) installed, I recommend a node manager like [fnm](https://github.com/Schniz/fnm).
-
-## Fonts
-
-I recommend using the following repo to get a "Nerd Font" (Font that supports icons)
-
-[getnf](https://github.com/ronniedroid/getnf)
-
-**NOTE** Some are already setup as examples, remove them if you want
-
----
-
-> The computing scientist's main challenge is not to get confused by the complexities of his own making.
-
-\- Edsger W. Dijkstra
+1. Create `lua/user/myplugin.lua` returning a lazy.nvim spec table
+2. Add `spec "user.myplugin"` in `init.lua`
+3. For experimental plugins, use `lua/user/extras/` and optionally comment out the spec line
