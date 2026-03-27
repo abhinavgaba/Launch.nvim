@@ -6,7 +6,6 @@ pcall(require, "user.options-local")
 require "user.keymaps"
 require "user.autocmds"
 require "user.lazy-utils"
-require "user.custom.functions"
 require "user.neovide-options"
 spec "user.snacks"
 spec "user.abolish"
@@ -76,6 +75,7 @@ spec "user.extras.mini-animate"
 spec "user.extras.symbol-usage"
 spec "user.extras.advanced-git-search"
 spec "user.extras.startuptime"
+spec "user.omp-maptype-info"
 require "user.lazy"
 -- Disabled
 -- spec "user.extras.copilot" -- Using copilot_ls via sidekick instead
