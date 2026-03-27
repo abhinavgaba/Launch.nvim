@@ -44,6 +44,15 @@ git clone <this-repo-url> ~/.config/nvim
 
 Run `nvim` and wait for the plugins to be installed.
 
+**TIP**: After the initial install, plugins will be at their latest versions.
+To pin them to the known-good versions recorded in `lazy-lock.json`, run
+`:Lazy restore` inside Neovim. For a headless first-time setup that installs
+and restores in one shot:
+
+```sh
+nvim --headless "+Lazy! restore" +qa
+```
+
 **NOTE**: Treesitter will pull in parsers the next time you open Neovim.
 
 ## Prerequisites
