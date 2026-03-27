@@ -2,7 +2,7 @@ local M = {
   "FabijanZulj/blame.nvim",
   event = "VeryLazy",
   keys = {
-    { "<leader>gb", "<cmd>BlameToggle<CR>", desc = "Git Blame Toggle" },
+    { "<leader>gx", "<cmd>BlameToggle<CR>", desc = "Git Blame eXtended (blame.nvim)" },
   },
 }
 
@@ -15,6 +15,8 @@ function M.config()
     stack_pop = "<S-TAB>",
     show_commit = "<CR>",
     close = { "<esc>", "q" },
+    copy_hash = "y",
+    open_in_browser = "o",
   }
 
   blame.setup {

@@ -36,10 +36,10 @@ local function gitSignsDiffVsCommit(commit_id)
     vim.api.nvim_command "DiffviewClose"
   end
 
-  -- It's possible that the current window is for a preview-popup created by
-  -- Gitsigns blame_line, in which case we should close it as we cannot start
-  -- a diff from it. This might also help with other similar pop-ups.
-  if vim.api.nvim_buf_get_name(0) == "" then
+  -- If we're in a gitsigns blame buffer (scratch, no name), close it first.
+  -- Closing the blame window returns focus to the source buffer.
+  local bufname = vim.api.nvim_buf_get_name(0)
+  if bufname == "" or vim.bo.buftype == "nofile" then
     vim.api.nvim_win_close(0, true)
   end
 
@@ -139,8 +139,9 @@ M.opts = {
 }
 
 M.keys = {
-  { "<leader>gdc", gitSignsDiffVsCword, desc = "Diff vs Commit-under-Cursor" },
-  { "<leader>gdp", gitSignsDiffVsCwordParent, desc = "Diff vs Commit-under-Cursor's Parent" },
+  { "<leader>gb",  function() require("gitsigns").blame() end, desc = "Git Blame (gitsigns)" },
+  { "<leader>gdc", gitSignsDiffVsCword,        desc = "Diff vs Commit-under-Cursor" },
+  { "<leader>gdp", gitSignsDiffVsCwordParent,  desc = "Diff vs Commit-under-Cursor's Parent" },
 }
 
 return M
