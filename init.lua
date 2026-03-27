@@ -23,7 +23,6 @@ spec "user.mason-null-ls"
 spec "user.nvim-dap"
 spec "user.overseer"
 spec "user.blink"
-spec "user.extras.copilot"
 spec "user.extras.sidekick"
 spec "user.extras.render-markdown"
 spec "user.extras.avante"
@@ -79,6 +78,7 @@ spec "user.extras.advanced-git-search"
 spec "user.extras.startuptime"
 require "user.lazy"
 -- Disabled
+-- spec "user.extras.copilot" -- Using copilot_ls via sidekick instead
 -- spec "user.extras.blink-cmp-copilot" -- Now using blink-copilot
 -- spec "user.alpha" -- Use snacks.dashboard instead
 -- spec "user.telescope"
