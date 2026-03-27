@@ -1,7 +1,7 @@
 local M = {
   "echasnovski/mini.splitjoin",
   version = false,
-  VeryLazy = true,
+  event = "VeryLazy",
   opts = {},
 }
 

@@ -89,7 +89,6 @@ require "user.lazy"
 -- spec "user.navic" -- dropbar is better
 -- spec "user.extras.navbuddy"
 -- spec "user.extras.neoscroll" -- Use snacks.scroll instead
--- spec "user.extras.neodev"
 -- spec "user.extras.oil" --nvim-tree is sufficient for most cases
 -- spec "user.feline" -- Use lualine instead
 -- spec "user.extras.mini-diff"
