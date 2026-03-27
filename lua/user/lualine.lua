@@ -4,7 +4,7 @@ local M = {
   "nvim-lualine/lualine.nvim",
   dependencies = {
     "nvim-tree/nvim-web-devicons",
-    "AndreM222/copilot-lualine",
+    -- "AndreM222/copilot-lualine", -- Using sidekick.status instead
     "meuter/lualine-so-fancy.nvim",
   },
 }
@@ -86,7 +86,29 @@ function M.config()
         },
       },
       lualine_x = {
-        { "copilot", fmt = trunc(0, 0, 120, true) },
+        {
+          function()
+            local ok, mod = pcall(require, "sidekick.status")
+            if ok and mod.get() then
+              return require("user.icons").ui.Copilot
+            end
+            return ""
+          end,
+          color = function()
+            local ok, mod = pcall(require, "sidekick.status")
+            local status = ok and mod.get()
+            if status then
+              if status.kind == "Error" then
+                return { fg = "#e78284" } -- catppuccin red
+              elseif status.busy then
+                return { fg = "#e5c890" } -- catppuccin yellow
+              else
+                return { fg = "#81c8be" } -- catppuccin teal
+              end
+            end
+          end,
+          fmt = trunc(0, 0, 120, true),
+        },
         { "fancy_macro", fmt = trunc(0, 0, 120, true) },
         { keymap, fmt = trunc(0, 0, 120, true) },
         { "fancy_diagnostics", fmt = trunc(0, 0, 50, true) },
