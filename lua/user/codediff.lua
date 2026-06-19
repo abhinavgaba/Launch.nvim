@@ -139,6 +139,28 @@ local function set_commit_info_keymap(bufnr)
   vim.keymap.set("n", "gi", show_commit_info, { buffer = bufnr, desc = "Show commit info" })
 end
 
+-- CodeDiff force-clears the winbar on both diff panes (sync_window_ui) on every
+-- BufEnter/WinEnter, while dropbar only re-attaches to the focused window. The net
+-- effect is dropbar showing on the active pane only. Re-attach it to BOTH diff
+-- windows (scheduled, so we run after CodeDiff's clearing) to keep them in sync.
+local function reattach_dropbar(session)
+  local ok, dropbar_utils = pcall(require, "dropbar.utils")
+  if not ok or not session then
+    return
+  end
+  vim.schedule(function()
+    for _, pair in ipairs {
+      { session.original_win, session.original_bufnr },
+      { session.modified_win, session.modified_bufnr },
+    } do
+      local win, buf = pair[1], pair[2]
+      if win and buf and vim.api.nvim_win_is_valid(win) and vim.api.nvim_buf_is_valid(buf) then
+        dropbar_utils.bar.attach(buf, win)
+      end
+    end
+  end)
+end
+
 -- Hook into CodeDiff's open event
 vim.api.nvim_create_autocmd("User", {
   group = group,
@@ -153,12 +175,14 @@ vim.api.nvim_create_autocmd("User", {
     if session then
       set_commit_info_keymap(session.original_bufnr)
       set_commit_info_keymap(session.modified_bufnr)
+      reattach_dropbar(session)
     end
   end,
 })
 
--- Also handle BufEnter to catch when switching between buffers in CodeDiff
-vim.api.nvim_create_autocmd("BufEnter", {
+-- Also handle BufEnter/WinEnter to catch switching between buffers/panes in CodeDiff.
+-- CodeDiff re-clears both winbars on these events, so reattach dropbar each time.
+vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
   group = group,
   callback = function(args)
     local tabpage = vim.api.nvim_get_current_tabpage()
@@ -169,6 +193,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
     local session = session_mod.get_active_diffs()[tabpage]
     if session then
       set_commit_info_keymap(args.buf)
+      reattach_dropbar(session)
     end
   end,
 })
