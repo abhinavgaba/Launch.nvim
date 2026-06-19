@@ -143,10 +143,12 @@ function M.config()
         local sources = require "dropbar.sources"
         local utils = require "dropbar.utils"
 
-        -- Diff / VCS virtual buffers: show "filename @ rev" only.
+        -- Diff / VCS virtual buffers: show "filename @ rev" followed by code
+        -- breadcrumbs. LSP doesn't attach to these virtual buffers, but plugins
+        -- like CodeDiff start a treesitter parser, so the treesitter source works.
         local vcs_file, vcs_rev = parse_vcs_bufname(vim.api.nvim_buf_get_name(buf))
         if vcs_file then
-          return { vcs_source(vcs_file, vcs_rev) }
+          return { vcs_source(vcs_file, vcs_rev), sources.treesitter }
         end
 
         if vim.bo[buf].ft == "markdown" then
