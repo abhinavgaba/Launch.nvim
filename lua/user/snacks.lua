@@ -1,13 +1,13 @@
 -- A small collection of QOL plugins.
 local M = {
   "folke/snacks.nvim",
-  dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons', 'nvim-tree/nvim-web-devicons' },
+  dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.icons", "nvim-tree/nvim-web-devicons" },
   priority = 1000,
   lazy = false,
 
   ---@type snacks.Config
   opts = {
-    animate = {enabled = true},
+    animate = { enabled = true },
     bigfile = { enabled = false },
     dashboard = { enabled = true },
     indent = { enabled = false },
@@ -18,25 +18,55 @@ local M = {
     scope = { enabled = true },
     statuscolumn = { enabled = true },
     words = { enabled = false }, -- illuminate does this too
-    zen = {enabled = false},
-    lazygit = {enabled = true},
-    gitbrowse = {enabled = false},
-    git = {enabled = true},
+    zen = { enabled = false },
+    lazygit = { enabled = true },
+    gitbrowse = { enabled = false },
+    git = { enabled = true },
     profiler = {},
   },
-    keys = {
-    { "<leader>.",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
-    { "<leader>S",  function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
-    { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
-    { "<leader>cR", function() Snacks.rename.rename_file() end, desc = "Rename File" },
+  keys = {
+    {
+      "<leader>.",
+      function()
+        Snacks.scratch()
+      end,
+      desc = "Toggle Scratch Buffer",
+    },
+    {
+      "<leader>S",
+      function()
+        Snacks.scratch.select()
+      end,
+      desc = "Select Scratch Buffer",
+    },
+    {
+      "<leader>bd",
+      function()
+        Snacks.bufdelete()
+      end,
+      desc = "Delete Buffer",
+    },
+    {
+      "<leader>cR",
+      function()
+        Snacks.rename.rename_file()
+      end,
+      desc = "Rename File",
+    },
     -- { "]]",         function() Snacks.words.jump(vim.v.count1) end, desc = "Next Reference", mode = { "n", "t" } },
     -- { "[[",         function() Snacks.words.jump(-vim.v.count1) end, desc = "Prev Reference", mode = { "n", "t" } },
-    { "<leader>ps", function() Snacks.profiler.scratch() end, desc = "Profiler Scratch Bufer" },
+    {
+      "<leader>ps",
+      function()
+        Snacks.profiler.scratch()
+      end,
+      desc = "Profiler Scratch Bufer",
+    },
     {
       "<leader>N",
       desc = "Neovim News",
       function()
-        Snacks.win({
+        Snacks.win {
           file = vim.api.nvim_get_runtime_file("doc/news.txt", false)[1],
           width = 0.6,
           height = 0.6,
@@ -47,9 +77,9 @@ local M = {
             statuscolumn = " ",
             conceallevel = 3,
           },
-        })
+        }
       end,
-    }
+    },
   },
 }
 
@@ -65,35 +95,33 @@ function M.config(_, opts)
 end
 
 function M.init()
-  require("user.lazy-utils").on_very_lazy(
-    function()
-      -- Setup some globals for debugging (lazy-loaded)
-      _G.dd = function(...)
-        Snacks.debug.inspect(...)
-      end
-      _G.bt = function()
-        Snacks.debug.backtrace()
-      end
-      vim.print = _G.dd -- Override print to use snacks for `:=` command
-
-      -- Create some toggle mappings
-      Snacks.toggle.option("spell", { name = "Spelling" }):map "<leader>ts"
-      Snacks.toggle.option("wrap", { name = "Wrap" }):map "<leader>tw"
-      Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map "<leader>tL"
-      Snacks.toggle.line_number():map "<leader>tl"
-      Snacks.toggle
-        .option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
-        :map "<leader>tc"
-      Snacks.toggle.treesitter():map "<leader>tT"
-      Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map "<leader>tb"
-      -- Snacks.toggle.indent():map "<leader>tg"
-      Snacks.toggle.dim():map "<leader>tD"
-      -- Toggle the profiler
-      Snacks.toggle.profiler():map("<leader>Pp")
-      -- Toggle the profiler highlights
-      Snacks.toggle.profiler_highlights():map("<leader>Ph")
+  require("user.lazy-utils").on_very_lazy(function()
+    -- Setup some globals for debugging (lazy-loaded)
+    _G.dd = function(...)
+      Snacks.debug.inspect(...)
     end
-  )
+    _G.bt = function()
+      Snacks.debug.backtrace()
+    end
+    vim.print = _G.dd -- Override print to use snacks for `:=` command
+
+    -- Create some toggle mappings
+    Snacks.toggle.option("spell", { name = "Spelling" }):map "<leader>ts"
+    Snacks.toggle.option("wrap", { name = "Wrap" }):map "<leader>tw"
+    Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map "<leader>tL"
+    Snacks.toggle.line_number():map "<leader>tl"
+    Snacks.toggle
+      .option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
+      :map "<leader>tc"
+    Snacks.toggle.treesitter():map "<leader>tT"
+    Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map "<leader>tB"
+    -- Snacks.toggle.indent():map "<leader>tg"
+    Snacks.toggle.dim():map "<leader>tD"
+    -- Toggle the profiler
+    Snacks.toggle.profiler():map "<leader>Pp"
+    -- Toggle the profiler highlights
+    Snacks.toggle.profiler_highlights():map "<leader>Ph"
+  end)
 end
 
 return M

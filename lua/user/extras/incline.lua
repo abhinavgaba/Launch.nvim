@@ -9,6 +9,23 @@ function M.config()
   local devicons = require "nvim-web-devicons"
   local vcs = require "user.custom.vcs-bufname"
 
+  -- Use Snacks.toggle so the on/off state shows up in which-key.
+  Snacks.toggle
+    .new({
+      name = "Incline (filename label)",
+      get = function()
+        return require("incline").is_enabled()
+      end,
+      set = function(state)
+        if state then
+          require("incline").enable()
+        else
+          require("incline").disable()
+        end
+      end,
+    })
+    :map "<Leader>ti"
+
   require("incline").setup {
     window = {
       padding = 0,

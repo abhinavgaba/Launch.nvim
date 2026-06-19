@@ -87,14 +87,57 @@ local function truncated_path_source()
   }
 end
 
+-- Global on/off flag, gated into bar.enable below. dropbar re-attaches the
+-- winbar on every BufEnter/WinEnter, so a plain `set winbar=` won't stick;
+-- flipping this flag (and refreshing windows) is the durable way to toggle it.
+vim.g.dropbar_enabled = vim.g.dropbar_enabled ~= false
+
+-- Re-evaluate the winbar on every window in the current tab so a toggle takes
+-- effect immediately rather than on the next buffer/window switch.
+local function refresh_dropbar()
+  local utils = require "dropbar.utils"
+  for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    if vim.api.nvim_win_is_valid(win) then
+      if vim.g.dropbar_enabled then
+        utils.bar.attach(vim.api.nvim_win_get_buf(win), win)
+      else
+        vim.wo[win][0].winbar = ""
+      end
+    end
+  end
+end
+
 function M.config()
   local dropbar_api = require "dropbar.api"
   vim.keymap.set("n", "<Leader>;", dropbar_api.pick, { desc = "Pick symbols in winbar" })
   vim.keymap.set("n", "[;", dropbar_api.goto_context_start, { desc = "Go to start of current context" })
   vim.keymap.set("n", "];", dropbar_api.select_next_context, { desc = "Select next context" })
+  -- Use Snacks.toggle so the on/off state shows up in which-key.
+  Snacks.toggle
+    .new({
+      name = "Dropbar (winbar)",
+      get = function()
+        return vim.g.dropbar_enabled
+      end,
+      set = function(state)
+        vim.g.dropbar_enabled = state
+        refresh_dropbar()
+      end,
+    })
+    :map "<Leader>tb"
+
+  -- Default enable predicate from dropbar.configs, evaluated lazily so we don't
+  -- duplicate its logic; we only add the global flag gate in front of it.
+  local default_enable = require("dropbar.configs").opts.bar.enable
 
   require("dropbar").setup {
     bar = {
+      enable = function(buf, win, info)
+        if not vim.g.dropbar_enabled then
+          return false
+        end
+        return require("dropbar.configs").eval(default_enable, buf, win, info)
+      end,
       sources = function(buf, win)
         local sources = require "dropbar.sources"
         local utils = require "dropbar.utils"
