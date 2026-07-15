@@ -1,6 +1,7 @@
 vim.opt.backup = false -- creates a backup file
 vim.opt.clipboard = "unnamedplus" -- allows neovim to access the system clipboard
-if vim.env.SSH_TTY then
+-- If we are connected via SSH, use OSC52 to sync clipboard
+if vim.env.SSH_CLIENT or vim.env.SSH_TTY then
 -- Use osc52 to sync clipboard over SSH
   vim.g.clipboard = {
     name = "OSC 52",
